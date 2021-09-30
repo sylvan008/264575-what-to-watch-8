@@ -1,7 +1,7 @@
 # Личный проект «Что посмотреть»
 
 * Студент: [Олег Селин](https://up.htmlacademy.ru/react/8/user/264575).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий (sench) Железцов](https://htmlacademy.ru/profile/sench).
 
 ---
 
