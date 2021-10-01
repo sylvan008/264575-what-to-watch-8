@@ -1,6 +1,18 @@
 import FilmCard from '../film-card/film-card';
 
-function MainPage(): JSX.Element {
+type Promo = {
+  name: string,
+  genre: string,
+  release: number,
+}
+
+type PropsType = {
+  promo: Promo
+}
+
+function MainPage(props: PropsType): JSX.Element {
+  const {promo} = props;
+
   return (
     <>
       <section className="film-card">
@@ -38,10 +50,10 @@ function MainPage(): JSX.Element {
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="film-card__title">{promo.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{promo.genre}</span>
+                <span className="film-card__year">{promo.release}</span>
               </p>
 
               <div className="film-card__buttons">
