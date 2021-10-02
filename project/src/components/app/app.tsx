@@ -1,14 +1,5 @@
 import MainPage from '../main-page/main-page';
-
-type Promo = {
-  name: string,
-  genre: string,
-  release: number,
-}
-
-type PropsType = {
-  promo: Promo
-}
+import {PropsType} from './types';
 
 function App(props: PropsType): JSX.Element {
   return <MainPage promo={props.promo} />;

@@ -1,5 +1,7 @@
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
+import UserBlock from '../user-block/user-block';
+import FilmNav from '../film-nav/film-nav';
 
 function MoviePage(): JSX.Element {
   return (
@@ -15,16 +17,7 @@ function MoviePage(): JSX.Element {
           <header className="page-header film-card__head">
             <Logo />
 
-            <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-                </div>
-              </li>
-              <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
-              </li>
-            </ul>
+            <UserBlock />
           </header>
 
           <div className="film-card__wrap">
@@ -61,19 +54,7 @@ function MoviePage(): JSX.Element {
             </div>
 
             <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
+              <FilmNav />
 
               <div className="film-rating">
                 <div className="film-rating__score">8,9</div>
