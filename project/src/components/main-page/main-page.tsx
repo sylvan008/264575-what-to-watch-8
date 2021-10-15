@@ -1,12 +1,12 @@
+import {PropsType} from './types';
 import GenresList from '../genres-list/genres-list';
-import FilmCard from '../film-card/film-card';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
 import UserBlock from '../user-block/user-block';
-import {PropsType} from './types';
+import FilmsList from '../films-list/films-list';
 
 function MainPage(props: PropsType): JSX.Element {
-  const {promo} = props;
+  const {promo, films} = props;
 
   return (
     <>
@@ -61,28 +61,7 @@ function MainPage(props: PropsType): JSX.Element {
 
           <GenresList />
 
-          <div className="catalog__films-list">
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-            <FilmCard />
-          </div>
+          <FilmsList films={films} />
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>

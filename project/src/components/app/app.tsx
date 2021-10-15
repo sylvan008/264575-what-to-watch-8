@@ -11,11 +11,13 @@ import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 
 function App(props: PropsType): JSX.Element {
+  const {promo, films} = props;
+
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
-          <MainPage promo={props.promo} />;
+          <MainPage promo={promo} films={films} />;
         </Route>
         <PrivateRoute
           exact
@@ -30,7 +32,7 @@ function App(props: PropsType): JSX.Element {
           exact
           path={AppRoute.MyList}
           authorizationStatus={AuthorizationStatus.NoAuth}
-          render={() => <MyList />}
+          render={() => <MyList films={films} />}
         />
         <Route exact path={AppRoute.Player}>
           <Player />
