@@ -1,9 +1,9 @@
 import {PropsType} from './types';
 
-function FilmCard({film}: PropsType): JSX.Element {
-  const {name, previewImage} = film;
+function FilmCard({film, updateActiveCard}: PropsType): JSX.Element {
+  const {name, previewImage, id} = film;
   return (
-    <article className="small-film-card catalog__films-card">
+    <article className="small-film-card catalog__films-card" onMouseOver={() => updateActiveCard(id)} onMouseOut={() => updateActiveCard(null)}>
       <div className="small-film-card__image">
         <img src={previewImage} alt={name} width="280" height="175"/>
       </div>
