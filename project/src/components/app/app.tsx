@@ -10,6 +10,8 @@ import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 
+const SIMILAR_MOVIE_COUNT = 4;
+
 function App(props: PropsType): JSX.Element {
   const {promo, films} = props;
 
@@ -26,7 +28,7 @@ function App(props: PropsType): JSX.Element {
           render={() => <AddReview />}
         />
         <Route exact path={AppRoute.Film}>
-          <MoviePage />
+          <MoviePage films={films.slice(0, SIMILAR_MOVIE_COUNT)} />
         </Route>
         <PrivateRoute
           exact
