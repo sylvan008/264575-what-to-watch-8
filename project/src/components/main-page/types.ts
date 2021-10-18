@@ -1,3 +1,5 @@
+import { Film } from '../../types/film';
+
 export type Promo = {
   name: string,
   genre: string,
@@ -5,5 +7,6 @@ export type Promo = {
 }
 
 export type PropsType = {
-  promo: Promo
+  promo: Promo,
+  films: Film[],
 }

@@ -10,30 +10,34 @@ import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 
+const SIMILAR_MOVIE_COUNT = 4;
+
 function App(props: PropsType): JSX.Element {
+  const {promo, films} = props;
+
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
-          <MainPage promo={props.promo} />;
+          <MainPage promo={promo} films={films} />;
         </Route>
         <PrivateRoute
           exact
           path={AppRoute.AddReview}
           authorizationStatus={AuthorizationStatus.Auth}
-          render={() => <AddReview />}
+          render={() => <AddReview film={films[0]} />}
         />
         <Route exact path={AppRoute.Film}>
-          <MoviePage />
+          <MoviePage films={films.slice(0, SIMILAR_MOVIE_COUNT)} />
         </Route>
         <PrivateRoute
           exact
           path={AppRoute.MyList}
           authorizationStatus={AuthorizationStatus.NoAuth}
-          render={() => <MyList />}
+          render={() => <MyList films={films} />}
         />
         <Route exact path={AppRoute.Player}>
-          <Player />
+          <Player film={films[0]} />
         </Route>
         <Route exact path={AppRoute.Login}>
           <SignIn />

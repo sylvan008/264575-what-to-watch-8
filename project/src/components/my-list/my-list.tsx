@@ -1,9 +1,10 @@
+import {PropsType} from './types';
 import Logo from '../logo/logo';
 import Footer from '../footer/footer';
-import FilmCard from '../film-card/film-card';
 import UserBlock from '../user-block/user-block';
+import FilmsList from '../films-list/films-list';
 
-function MyList(): JSX.Element {
+function MyList({films}: PropsType): JSX.Element {
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -17,17 +18,7 @@ function MyList(): JSX.Element {
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <div className="catalog__films-list">
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-          <FilmCard />
-        </div>
+        <FilmsList films={films} />
       </section>
 
       <Footer />

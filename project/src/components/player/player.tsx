@@ -1,4 +1,7 @@
-function Player(): JSX.Element {
+import {PropsType} from './types';
+
+function Player({film}: PropsType): JSX.Element {
+  const {name} = film;
   return (
     <div className="player">
       <video src="#" className="player__video" poster="img/player-poster.jpg" />
@@ -21,7 +24,7 @@ function Player(): JSX.Element {
             </svg>
             <span>Play</span>
           </button>
-          <div className="player__name">Transpotting</div>
+          <div className="player__name">{name}</div>
 
           <button type="button" className="player__full-screen">
             <svg viewBox="0 0 27 27" width="27" height="27">
