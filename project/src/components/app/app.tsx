@@ -37,7 +37,7 @@ function App(props: PropsType): JSX.Element {
           render={() => <MyList films={films} />}
         />
         <Route exact path={AppRoute.Player}>
-          <Player />
+          <Player film={films[0]} />
         </Route>
         <Route exact path={AppRoute.Login}>
           <SignIn />
