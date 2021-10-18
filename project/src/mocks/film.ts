@@ -4,7 +4,7 @@ export const filmsMock = [
     'name': 'The Grand Budapest Hotel',
     'posterImage': 'img/the-grand-budapest-hotel-poster.jpg',
     'previewImage': 'img/johnny-english.jpg',
-    'backgroundImage': 'img/the-grand-budapest-hotel-bg.jpg',
+    'backgroundImage': 'img/bg-the-grand-budapest-hotel.jpg',
     'backgroundColor': '#ffffff',
     'videoLink': 'https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4',
     'previewVideoLink': 'https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4',

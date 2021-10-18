@@ -1,4 +1,7 @@
-import {ChangeEvent, FormEvent, useState } from 'react';
+import {ChangeEvent, FormEvent, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {PropsType} from './types';
+import {AppRoute, RouteParams} from '../../utils/const';
 import Logo from '../logo/logo';
 import RatingInput from '../rating-input/rating-input';
 import UserBlock from '../user-block/user-block';
@@ -7,7 +10,9 @@ const RATING_DEFAULT = '8';
 const RATING_MAX = 10;
 const RATING_MIN = 1;
 
-function AddReview():JSX.Element {
+function AddReview({film}: PropsType):JSX.Element {
+  const {id, name, posterImage, backgroundImage} = film;
+
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(RATING_DEFAULT);
 
@@ -31,7 +36,7 @@ function AddReview():JSX.Element {
     <section className="film-card film-card--full">
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
+          <img src={backgroundImage} alt={name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -42,10 +47,10 @@ function AddReview():JSX.Element {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <a href="film-page.html" className="breadcrumbs__link">The Grand Budapest Hotel</a>
+                <Link to={AppRoute.Film.replace(RouteParams.ID, `${id}`)} className="breadcrumbs__link">{name}</Link>
               </li>
               <li className="breadcrumbs__item">
-                <a href="#" className="breadcrumbs__link">Add review</a>
+                <Link to={'./'} className="breadcrumbs__link">Add review</Link>
               </li>
             </ul>
           </nav>
@@ -54,7 +59,7 @@ function AddReview():JSX.Element {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327"/>
+          <img src={posterImage} alt="The Grand Budapest Hotel poster" width="218" height="327"/>
         </div>
       </div>
 

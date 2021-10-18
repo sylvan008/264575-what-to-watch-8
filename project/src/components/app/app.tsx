@@ -25,7 +25,7 @@ function App(props: PropsType): JSX.Element {
           exact
           path={AppRoute.AddReview}
           authorizationStatus={AuthorizationStatus.Auth}
-          render={() => <AddReview />}
+          render={() => <AddReview film={films[0]} />}
         />
         <Route exact path={AppRoute.Film}>
           <MoviePage films={films.slice(0, SIMILAR_MOVIE_COUNT)} />
