@@ -8,7 +8,7 @@ import Logo from '../logo/logo';
 import UserBlock from '../user-block/user-block';
 
 type params = {
-  id: string
+  id: string,
 }
 
 function MoviePage({films} : PropsType): JSX.Element {

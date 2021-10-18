@@ -4,7 +4,7 @@ import FilmCard from '../film-card/film-card';
 import { updateActiveFilm } from '../../types/film';
 
 function FilmsList({films}: PropsType): JSX.Element {
-  const [activeCard, setActiveCard] = useState<number|null>(null);
+  const [, setActiveCard] = useState<number|null>(null);
   const updateActiveCard: updateActiveFilm = (id) => setActiveCard(id);
 
   return (

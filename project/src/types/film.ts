@@ -15,7 +15,7 @@ export type Film = {
   'runTime': number,
   'genre': string,
   'released': number,
-  'isFavorite': boolean
+  'isFavorite': boolean,
 }
 
 export type updateActiveFilm = (id: number | null) => void;
