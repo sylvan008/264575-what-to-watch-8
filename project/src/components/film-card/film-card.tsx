@@ -24,7 +24,7 @@ function FilmCard({playPreview = false, film, updateActiveCard}: PropsType): JSX
     >
       <div className="small-film-card__image">
         {playPreview
-          ? <VideoPlayer src={previewVideoLink} poster={previewImage} autoPlay muted />
+          ? <VideoPlayer src={previewVideoLink} poster={previewImage} isAutoPlay />
           : <img src={previewImage} alt={name} width="280" height="175"/>}
 
       </div>

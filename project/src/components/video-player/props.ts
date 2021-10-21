@@ -1,6 +1,6 @@
 export type PropsType = {
-  muted: boolean,
-  autoPlay: boolean,
+  isMuted?: boolean,
+  isAutoPlay?: boolean,
   src: string,
   poster: string,
 }

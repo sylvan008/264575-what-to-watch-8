@@ -1,9 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {PropsType} from './props';
 
-export function VideoPlayer({autoPlay = false, muted = true, src, poster}: PropsType): JSX.Element {
-  const [isPlaying] = useState(autoPlay);
-  const [isMuted] = useState(muted);
+export function VideoPlayer({isAutoPlay = false, isMuted = true, src, poster}: PropsType): JSX.Element {
+  const [isPlaying] = useState(isAutoPlay);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
