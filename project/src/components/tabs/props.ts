@@ -1,3 +1,3 @@
 export type PropsType = {
-  children: JSX.Element[];
+  children: JSX.Element[],
 }

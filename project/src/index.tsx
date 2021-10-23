@@ -12,6 +12,10 @@ const promo = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App promo={promo} films={filmsMock} reviews={reviewsMock} />
+    <App
+      promo={promo}
+      films={filmsMock}
+      reviews={reviewsMock}
+    />
   </React.StrictMode>,
   document.getElementById('root'));

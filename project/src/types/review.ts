@@ -1,7 +1,7 @@
 import {Item} from './item';
 
 type User = Item & {
-  name: string
+  name: string,
 }
 
 export type Review = Item & {
