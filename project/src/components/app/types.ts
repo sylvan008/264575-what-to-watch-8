@@ -1,4 +1,5 @@
 import {Film} from '../../types/film';
+import {Review} from '../../types/review';
 
 export type Promo = {
   name: string,
@@ -9,4 +10,5 @@ export type Promo = {
 export type PropsType = {
   promo: Promo,
   films: Film[],
+  reviews: Review[],
 }

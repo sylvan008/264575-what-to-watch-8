@@ -1,17 +1,20 @@
 import {Link, useParams} from 'react-router-dom';
 import {AppRoute} from '../../utils/const';
 import {PropsType} from './types';
-import FilmNav from '../film-nav/film-nav';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
+import FilmOverview from '../film-overview/film-overview';
+import FilmDetails from '../film-details/film-details';
+import FilmReviews from '../film-reviews/film-reviews';
 import Logo from '../logo/logo';
+import Tabs from '../tabs/tabs';
 import UserBlock from '../user-block/user-block';
 
 type params = {
   id: string,
 }
 
-function MoviePage({films} : PropsType): JSX.Element {
+function MoviePage({film, films, reviews} : PropsType): JSX.Element {
   const {id}: params = useParams();
 
   return (
@@ -66,35 +69,11 @@ function MoviePage({films} : PropsType): JSX.Element {
             </div>
 
             <div className="film-card__desc">
-              <FilmNav />
-
-              <div className="film-rating">
-                <div className="film-rating__score">8,9</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">240 ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p>
-                  In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge
-                  Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave&#39;s friend and protege.
-                </p>
-
-                <p>
-                  Gustave prides himself on providing first-class service to the hotel&#39;s guests, including satisfying
-                  the sexual needs of the many elderly women who stay there. When one of Gustave&#39;s lovers dies
-                  mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her
-                  murder.
-                </p>
-
-                <p className="film-card__director"><strong>Director: Wes Anderson</strong></p>
-
-                <p className="film-card__starring">
-                  <strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong>
-                </p>
-              </div>
+              <Tabs>
+                <FilmOverview film={film} label="Overview" />
+                <FilmDetails film={film} label="Details" />
+                <FilmReviews reviews={reviews} label="Reviews" />
+              </Tabs>
             </div>
           </div>
         </div>
