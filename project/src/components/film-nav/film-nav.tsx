@@ -1,16 +1,20 @@
-function FilmNav(): JSX.Element {
+import {PropsType} from './props';
+
+function FilmNav({labels, activeTab, changeTabHandler}: PropsType): JSX.Element {
   return (
     <nav className="film-nav film-card__nav">
       <ul className="film-nav__list">
-        <li className="film-nav__item film-nav__item--active">
-          <a href="#" className="film-nav__link">Overview</a>
-        </li>
-        <li className="film-nav__item">
-          <a href="#" className="film-nav__link">Details</a>
-        </li>
-        <li className="film-nav__item">
-          <a href="#" className="film-nav__link">Reviews</a>
-        </li>
+        {labels.map((label) => (
+          <li className={['film-nav__item', activeTab === label ? 'film-nav__item--active' : ''].join(' ')} key={label}>
+            <a href="#" className="film-nav__link" onClick={(e) => {
+              e.preventDefault();
+              changeTabHandler(label);
+            }}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -13,7 +13,7 @@ import SignIn from '../sign-in/sign-in';
 const SIMILAR_MOVIE_COUNT = 4;
 
 function App(props: PropsType): JSX.Element {
-  const {promo, films} = props;
+  const {promo, films, reviews} = props;
 
   return (
     <BrowserRouter>
@@ -28,7 +28,7 @@ function App(props: PropsType): JSX.Element {
           render={() => <AddReview film={films[0]} />}
         />
         <Route exact path={AppRoute.Film}>
-          <MoviePage films={films.slice(0, SIMILAR_MOVIE_COUNT)} />
+          <MoviePage film={films[0]} films={films.slice(0, SIMILAR_MOVIE_COUNT)} reviews={reviews} />
         </Route>
         <PrivateRoute
           exact
