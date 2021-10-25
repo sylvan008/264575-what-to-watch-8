@@ -10,6 +10,7 @@ import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
 import UserBlock from '../user-block/user-block';
+import {filterFilms} from '../../app';
 
 function mapStateToProps({films, genre}: State) {
   return {
@@ -34,6 +35,8 @@ type ConnectedComponentProps = PropsFormRedux & PropsType;
 function MainPage(props: ConnectedComponentProps): JSX.Element {
   const {promo, films, activeGenre, onChangeGenre} = props;
   const genres = Object.values(Genres) as Genres[];
+
+  const showFilms = filterFilms(films, activeGenre);
 
   return (
     <>
@@ -88,7 +91,7 @@ function MainPage(props: ConnectedComponentProps): JSX.Element {
 
           <GenresList genres={genres} activeGenre={activeGenre} onChangeGenre={onChangeGenre} />
 
-          <FilmsList films={films} />
+          <FilmsList films={showFilms} />
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
