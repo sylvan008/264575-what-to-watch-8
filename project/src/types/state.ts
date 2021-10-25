@@ -1,6 +1,7 @@
 import {Film} from './film';
+import {Genres} from '../utils/const';
 
 export type State = {
-  genre: string,
+  genre: Genres,
   films: Film[],
 }

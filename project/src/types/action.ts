@@ -1,4 +1,5 @@
 import {Film} from './film';
+import {Genres} from '../utils/const';
 
 export enum ActionType {
   SetGenre = 'app/set_genre',
@@ -7,7 +8,7 @@ export enum ActionType {
 
 export type SetGenreAction = {
   type: ActionType.SetGenre,
-  payload: string,
+  payload: Genres,
 }
 
 export type SetFilmsAction = {

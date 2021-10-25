@@ -1,8 +1,9 @@
+import {MouseEvent} from 'react';
 import {PropsType} from './types';
 
 const ACTIVE_CLASS = 'catalog__genres-item--active';
 
-function GenresList({genres, activeGenre}: PropsType): JSX.Element {
+function GenresList({genres, activeGenre, onChangeGenre}: PropsType): JSX.Element {
   return (
     <ul className="catalog__genres-list">
       {genres.map((genre) => (
@@ -10,7 +11,12 @@ function GenresList({genres, activeGenre}: PropsType): JSX.Element {
           className={['catalog__genres-item', genre === activeGenre ? ACTIVE_CLASS : ''].join(' ')}
           key={genre}
         >
-          <a href="#" className="catalog__genres-link">{genre}</a>
+          <a href="#" className="catalog__genres-link" onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+            e.preventDefault();
+            onChangeGenre(genre);}}
+          >
+            {genre}
+          </a>
         </li>
       ))}
     </ul>

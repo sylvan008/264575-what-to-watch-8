@@ -1,13 +1,38 @@
 import {PropsType} from './types';
 import {Genres} from '../../utils/const';
+import {connect, ConnectedProps} from 'react-redux';
+import {Dispatch} from '@reduxjs/toolkit';
+import {State} from '../../types/state';
+import {Actions} from '../../types/action';
+import {setGenre} from '../../store/action';
 import GenresList from '../genres-list/genres-list';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
 import UserBlock from '../user-block/user-block';
 
-function MainPage(props: PropsType): JSX.Element {
-  const {promo, films} = props;
+function mapStateToProps({films, genre}: State) {
+  return {
+    films,
+    activeGenre: genre,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Actions>) {
+  return {
+    onChangeGenre(genre: Genres) {
+      dispatch(setGenre(genre));
+    },
+  };
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFormRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFormRedux & PropsType;
+
+function MainPage(props: ConnectedComponentProps): JSX.Element {
+  const {promo, films, activeGenre, onChangeGenre} = props;
   const genres = Object.values(Genres) as Genres[];
 
   return (
@@ -61,7 +86,7 @@ function MainPage(props: PropsType): JSX.Element {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <GenresList genres={genres} activeGenre={Genres.Crime} />
+          <GenresList genres={genres} activeGenre={activeGenre} onChangeGenre={onChangeGenre} />
 
           <FilmsList films={films} />
 
@@ -76,4 +101,5 @@ function MainPage(props: PropsType): JSX.Element {
   );
 }
 
-export default MainPage;
+export {MainPage};
+export default connector(MainPage);

@@ -14,12 +14,11 @@ const SIMILAR_MOVIE_COUNT = 4;
 
 function App(props: PropsType): JSX.Element {
   const {promo, films, reviews} = props;
-
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
-          <MainPage promo={promo} films={films} />;
+          <MainPage promo={promo} />;
         </Route>
         <PrivateRoute
           exact
