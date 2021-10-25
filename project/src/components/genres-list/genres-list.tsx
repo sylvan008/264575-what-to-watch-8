@@ -3,6 +3,9 @@ import {PropsType} from './types';
 
 const ACTIVE_CLASS = 'catalog__genres-item--active';
 
+/**
+ * Выводит список жанров для фильтрации фильмов по выбранному жанру.
+ */
 function GenresList({genres, activeGenre, onChangeGenre}: PropsType): JSX.Element {
   return (
     <ul className="catalog__genres-list">
