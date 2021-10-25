@@ -1,12 +1,14 @@
 import {PropsType} from './types';
+import {Genres} from '../../utils/const';
 import GenresList from '../genres-list/genres-list';
+import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
 import UserBlock from '../user-block/user-block';
-import FilmsList from '../films-list/films-list';
 
 function MainPage(props: PropsType): JSX.Element {
   const {promo, films} = props;
+  const genres = Object.values(Genres) as Genres[];
 
   return (
     <>
@@ -59,7 +61,7 @@ function MainPage(props: PropsType): JSX.Element {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <GenresList />
+          <GenresList genres={genres} activeGenre={Genres.Crime} />
 
           <FilmsList films={films} />
 
