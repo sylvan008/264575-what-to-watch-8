@@ -33,3 +33,8 @@ export enum AuthorizationStatus {
 export const RouteParams = {
   ID: ':id',
 };
+
+/**
+ * Количество карточек фильма по умолчанию
+ */
+export const STEP_CARDS_VIEW = 8;
