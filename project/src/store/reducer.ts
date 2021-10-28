@@ -1,11 +1,11 @@
 import {State} from '../types/state';
 import {Actions, ActionType} from '../types/action';
 import {AuthorizationStatus, Genres} from '../utils/const';
-import {filmsMock} from '../mocks/film';
 
 const initialState: State = {
   genre: Genres.AllGenres,
-  films: filmsMock,
+  films: [],
+  reviews: [],
   authorizationStatus: AuthorizationStatus.Unknown,
 };
 
@@ -15,6 +15,8 @@ export function reducer(state: State = initialState, action: Actions): State {
       return {...state, genre: action.payload};
     case ActionType.SetFilms:
       return {...state, films: action.payload};
+    case ActionType.SetReviews:
+      return {...state, reviews: action.payload};
     case ActionType.RequireAuthorization:
       return {...state, authorizationStatus: action.payload};
     case ActionType.RequireLogout:
