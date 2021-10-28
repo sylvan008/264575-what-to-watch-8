@@ -13,7 +13,7 @@ import SignIn from '../sign-in/sign-in';
 const SIMILAR_MOVIE_COUNT = 4;
 
 function App(props: PropsType): JSX.Element {
-  const {promo, films, reviews} = props;
+  const {promo} = props;
   return (
     <BrowserRouter>
       <Switch>

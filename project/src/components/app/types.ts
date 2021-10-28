@@ -9,6 +9,4 @@ export type Promo = {
 
 export type PropsType = {
   promo: Promo,
-  films: Film[],
-  reviews: Review[],
 }
