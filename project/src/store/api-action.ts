@@ -4,6 +4,7 @@ import {ThunkActionResult} from '../types/action';
 import {APIRoute, AuthorizationStatus} from '../utils/const';
 import {requireAuthorization, requireLogout, setFilms} from './action';
 import {dropToken, saveToken, Token} from '../services/token';
+import {adaptFilmToClient} from '../utils/api';
 
 /**
  * Запрос списка фильмов
@@ -11,7 +12,8 @@ import {dropToken, saveToken, Token} from '../services/token';
 export const fetchFilms = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Film[]>(APIRoute.Films);
-    dispatch(setFilms(data));
+    const adaptedData = data.map((film) => adaptFilmToClient(film));
+    dispatch(setFilms(adaptedData));
   };
 
 /**
