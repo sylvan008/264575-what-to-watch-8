@@ -9,11 +9,21 @@ import NotFound from '../not-found/not-found';
 import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
+import {State} from '../../types/state';
+import {connect, ConnectedProps} from 'react-redux';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
-function App(props: PropsType): JSX.Element {
-  const {promo} = props;
+const mapStateToProps = ({films}: State) => ({
+  films,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector> & PropsType;
+
+function App(props: PropsFromRedux): JSX.Element {
+  const {promo, films} = props;
   return (
     <BrowserRouter>
       <Switch>
@@ -27,7 +37,7 @@ function App(props: PropsType): JSX.Element {
           render={() => <AddReview film={films[0]} />}
         />
         <Route exact path={AppRoute.Film}>
-          <MoviePage film={films[0]} films={films.slice(0, SIMILAR_MOVIE_COUNT)} reviews={reviews} />
+          <MoviePage film={films[0]} films={films.slice(0, SIMILAR_MOVIE_COUNT)} />
         </Route>
         <PrivateRoute
           exact
@@ -49,4 +59,5 @@ function App(props: PropsType): JSX.Element {
   );
 }
 
-export default App;
+export {App};
+export default connector(App);

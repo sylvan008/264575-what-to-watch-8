@@ -6,7 +6,7 @@ import {
   requireLogout,
   setFilms,
   setGenre,
-  setReviews,
+  setReviews
 } from '../store/action';
 
 export enum ActionType {

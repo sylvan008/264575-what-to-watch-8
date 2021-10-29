@@ -18,12 +18,12 @@ export const fetchFilms = (): ThunkActionResult =>
  * Проверка авторизации
  */
 export const checkAuthAction = (): ThunkActionResult =>
-  (dispatch, _getState, api): Promise<void> => {
-    return api.get(APIRoute.Login)
+  (dispatch, _getState, api): Promise<void> => (
+    api.get(APIRoute.Login)
       .then(() => {
         dispatch(requireAuthorization(AuthorizationStatus.Auth));
-      });
-  };
+      })
+  );
 
 /**
  * Вход в аккаунт пользователя
