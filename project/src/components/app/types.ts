@@ -1,6 +1,3 @@
-import {Film} from '../../types/film';
-import {Review} from '../../types/review';
-
 export type Promo = {
   name: string,
   genre: string,
