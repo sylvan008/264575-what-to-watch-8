@@ -1,6 +1,9 @@
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../utils/const';
+import {connect, ConnectedProps} from 'react-redux';
+import {isCheckedAuth} from '../../app';
 import {PropsType} from './types';
+import {State} from '../../types/state';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
 import MoviePage from '../movie-page/movie-page';
@@ -9,13 +12,14 @@ import NotFound from '../not-found/not-found';
 import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
-import {State} from '../../types/state';
-import {connect, ConnectedProps} from 'react-redux';
+import Spinner from '../spinner/spinner';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
-const mapStateToProps = ({films}: State) => ({
+const mapStateToProps = ({authorizationStatus, films, isDataLoaded}: State) => ({
+  authorizationStatus,
   films,
+  isDataLoaded,
 });
 
 const connector = connect(mapStateToProps);
@@ -23,12 +27,17 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector> & PropsType;
 
 function App(props: PropsFromRedux): JSX.Element {
-  const {promo, films} = props;
+  const {authorizationStatus, promo, films, isDataLoaded} = props;
+
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+    return <Spinner />;
+  }
+
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
-          <MainPage promo={promo} />;
+          <MainPage promo={promo} />
         </Route>
         <PrivateRoute
           exact

@@ -7,6 +7,7 @@ const initialState: State = {
   films: [],
   reviews: [],
   authorizationStatus: AuthorizationStatus.Unknown,
+  isDataLoaded: false,
 };
 
 export function reducer(state: State = initialState, action: Actions): State {
@@ -18,7 +19,11 @@ export function reducer(state: State = initialState, action: Actions): State {
     case ActionType.SetReviews:
       return {...state, reviews: action.payload};
     case ActionType.RequireAuthorization:
-      return {...state, authorizationStatus: action.payload};
+      return {
+        ...state,
+        authorizationStatus: action.payload,
+        isDataLoaded: true,
+      };
     case ActionType.RequireLogout:
       return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
     default:

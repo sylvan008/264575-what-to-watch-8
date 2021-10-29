@@ -7,4 +7,5 @@ export type State = {
   films: Film[],
   reviews: Review[],
   authorizationStatus: AuthorizationStatus,
+  isDataLoaded: boolean,
 }
