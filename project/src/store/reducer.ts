@@ -1,11 +1,13 @@
 import {State} from '../types/state';
 import {Actions, ActionType} from '../types/action';
-import {Genres} from '../utils/const';
-import {filmsMock} from '../mocks/film';
+import {AuthorizationStatus, Genres} from '../utils/const';
 
-const initialState = {
+const initialState: State = {
   genre: Genres.AllGenres,
-  films: filmsMock,
+  films: [],
+  reviews: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
+  isDataLoaded: false,
 };
 
 export function reducer(state: State = initialState, action: Actions): State {
@@ -14,6 +16,16 @@ export function reducer(state: State = initialState, action: Actions): State {
       return {...state, genre: action.payload};
     case ActionType.SetFilms:
       return {...state, films: action.payload};
+    case ActionType.SetReviews:
+      return {...state, reviews: action.payload};
+    case ActionType.RequireAuthorization:
+      return {
+        ...state,
+        authorizationStatus: action.payload,
+        isDataLoaded: true,
+      };
+    case ActionType.RequireLogout:
+      return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
     default:
       return state;
   }

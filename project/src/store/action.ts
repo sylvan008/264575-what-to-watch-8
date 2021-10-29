@@ -1,6 +1,7 @@
 import {ActionType} from '../types/action';
 import {Film} from '../types/film';
-import {Genres} from '../utils/const';
+import {AuthorizationStatus, Genres} from '../utils/const';
+import {Review} from '../types/review';
 
 function setGenre(genre: Genres) {
   return ({
@@ -16,7 +17,31 @@ function setFilms(films: Film[]) {
   } as const);
 }
 
+function setReviews(reviews: Review[]) {
+  return ({
+    type: ActionType.SetReviews,
+    payload: reviews,
+  } as const);
+}
+
+function requireAuthorization(authorizationStatus: AuthorizationStatus) {
+  return ({
+    type: ActionType.RequireAuthorization,
+    payload: authorizationStatus,
+  } as const);
+}
+
+function requireLogout() {
+  return ({
+    type: ActionType.RequireLogout,
+    payload: AuthorizationStatus.NoAuth,
+  } as const);
+}
+
 export {
   setGenre,
-  setFilms
+  setFilms,
+  setReviews,
+  requireAuthorization,
+  requireLogout
 };

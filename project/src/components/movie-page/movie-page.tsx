@@ -14,7 +14,7 @@ type params = {
   id: string,
 }
 
-function MoviePage({film, films, reviews} : PropsType): JSX.Element {
+function MoviePage({film, films} : PropsType): JSX.Element {
   const {id}: params = useParams();
 
   return (
@@ -72,7 +72,7 @@ function MoviePage({film, films, reviews} : PropsType): JSX.Element {
               <Tabs>
                 <FilmOverview film={film} label="Overview" />
                 <FilmDetails film={film} label="Details" />
-                <FilmReviews reviews={reviews} label="Reviews" />
+                <FilmReviews reviews={[]} label="Reviews" />
               </Tabs>
             </div>
           </div>

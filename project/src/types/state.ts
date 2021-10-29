@@ -1,7 +1,11 @@
 import {Film} from './film';
-import {Genres} from '../utils/const';
+import {AuthorizationStatus, Genres} from '../utils/const';
+import {Review} from './review';
 
 export type State = {
   genre: Genres,
   films: Film[],
+  reviews: Review[],
+  authorizationStatus: AuthorizationStatus,
+  isDataLoaded: boolean,
 }
