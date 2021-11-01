@@ -1,8 +1,17 @@
-import { Route, Redirect } from 'react-router-dom';
-import { AuthorizationStatus, AppRoute } from '../../utils/const';
+import {Route, Redirect} from 'react-router-dom';
+import {connect, ConnectedProps} from 'react-redux';
+import {AuthorizationStatus, AppRoute} from '../../utils/const';
 import {PrivateRouteProps} from './types';
+import {State} from '../../types/state';
 
-function PrivateRoute(props: PrivateRouteProps): JSX.Element {
+const mapStateToProps = ({authorizationStatus}: State) => ({
+  authorizationStatus,
+});
+
+const connector = connect(mapStateToProps);
+type PropsFormRedux = PrivateRouteProps & ConnectedProps<typeof connector>;
+
+function PrivateRoute(props: PropsFormRedux): JSX.Element {
   const {exact, path, render, authorizationStatus} = props;
 
   return (
@@ -18,4 +27,5 @@ function PrivateRoute(props: PrivateRouteProps): JSX.Element {
   );
 }
 
-export default PrivateRoute;
+export {PrivateRoute};
+export default connector(PrivateRoute);
