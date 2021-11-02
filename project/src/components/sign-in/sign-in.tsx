@@ -1,16 +1,24 @@
 import {ChangeEvent, Dispatch, FormEvent, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 import {AxiosError} from 'axios';
 import {Actions, ThunkAppDispatch} from '../../types/action';
 import {AuthData} from '../../types/auth';
 import {loginAction} from '../../store/api-action';
-import {Messages, ResponseStatusCodes} from '../../utils/const';
+import {AppRoute, AuthorizationStatus, Messages, ResponseStatusCodes} from '../../utils/const';
 import {classNames, validateEmail, validatePassword} from '../../utils/common';
+import {State} from '../../types/state';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
 import SigninMessage from '../signin-message/signin-message';
 
 const SIGNIN_ERROR_CLASS = 'sign-in__field--error';
+
+function mapStateToProps({authorizationStatus}: State) {
+  return {
+    authorizationStatus,
+  };
+}
 
 function mapDispatchToProps(dispatch: Dispatch<Actions>) {
   return {
@@ -22,17 +30,21 @@ function mapDispatchToProps(dispatch: Dispatch<Actions>) {
   };
 }
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function SignIn(props: PropsFromRedux): JSX.Element {
-  const {onFormSubmit} = props;
+  const {authorizationStatus, onFormSubmit} = props;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailError, setIsEmailError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return (<Redirect to={AppRoute.Main} />);
+  }
 
   function formSubmitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
