@@ -1,9 +1,10 @@
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Route, Router as BrowserRouter, Switch} from 'react-router-dom';
 import {AppRoute} from '../../utils/const';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../app';
 import {PropsType} from './types';
 import {State} from '../../types/state';
+import {browserHistory} from '../../services/browser-history';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
 import MoviePage from '../movie-page/movie-page';
@@ -34,7 +35,7 @@ function App(props: PropsFromRedux): JSX.Element {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <MainPage promo={promo} />
