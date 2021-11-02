@@ -23,10 +23,23 @@ function setFilms(films: Film[]) {
   } as const);
 }
 
+/**
+ * Действие сохраняет фильм в хранилище
+ */
 function setFilm(film: Film) {
   return ({
     type: ActionType.setFilm,
     payload: film,
+  } as const);
+}
+
+/**
+ * Действие сохраняет похожие фильмы
+ */
+function setSimilarFilms(films: Film[]) {
+  return ({
+    type: ActionType.SetSimilarFilms,
+    payload: films,
   } as const);
 }
 
@@ -75,6 +88,7 @@ export {
   setFilms,
   setFilm,
   setReviews,
+  setSimilarFilms,
   redirectToRoute,
   requireAuthorization,
   requireLogout
