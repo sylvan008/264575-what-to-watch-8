@@ -2,6 +2,7 @@ import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
 import {State} from './state';
 import {
+  redirectToRoute,
   requireAuthorization,
   requireLogout,
   setFilms,
@@ -15,12 +16,14 @@ export enum ActionType {
   SetReviews = 'app/set_reviews',
   RequireAuthorization = 'user/require_authorization',
   RequireLogout = 'user/require_logout',
+  RedirectToRoute = 'app/redirect',
 }
 
 export type Actions =
   | ReturnType<typeof setGenre>
   | ReturnType<typeof setFilms>
   | ReturnType<typeof setReviews>
+  | ReturnType<typeof redirectToRoute>
   | ReturnType<typeof requireAuthorization>
   | ReturnType<typeof requireLogout>;
 

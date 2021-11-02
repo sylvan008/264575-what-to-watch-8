@@ -1,8 +1,11 @@
 import {ActionType} from '../types/action';
 import {Film} from '../types/film';
-import {AuthorizationStatus, Genres} from '../utils/const';
+import {AppRoute, AuthorizationStatus, Genres} from '../utils/const';
 import {Review} from '../types/review';
 
+/**
+ * Действие сохраняет в состоянии выбранный жанр
+ */
 function setGenre(genre: Genres) {
   return ({
     type: ActionType.SetGenre,
@@ -10,6 +13,9 @@ function setGenre(genre: Genres) {
   } as const);
 }
 
+/**
+ * Действие сохраняет в состоянии фильмы
+ */
 function setFilms(films: Film[]) {
   return ({
     type: ActionType.SetFilms,
@@ -17,6 +23,9 @@ function setFilms(films: Film[]) {
   } as const);
 }
 
+/**
+ * Действие сохраняет в состоянии отзывы пользователей
+ */
 function setReviews(reviews: Review[]) {
   return ({
     type: ActionType.SetReviews,
@@ -24,6 +33,9 @@ function setReviews(reviews: Review[]) {
   } as const);
 }
 
+/**
+ * Действие устанавливает статус авторизации пользователя, как авторизован
+ */
 function requireAuthorization(authorizationStatus: AuthorizationStatus) {
   return ({
     type: ActionType.RequireAuthorization,
@@ -31,6 +43,9 @@ function requireAuthorization(authorizationStatus: AuthorizationStatus) {
   } as const);
 }
 
+/**
+ * Действие устанавливает статус авторизации пользователя, как не авторизован
+ */
 function requireLogout() {
   return ({
     type: ActionType.RequireLogout,
@@ -38,10 +53,21 @@ function requireLogout() {
   } as const);
 }
 
+/**
+ * Действие для оповещения redux о необходимости переадресовать пользователя
+ */
+function redirectToRoute(url: AppRoute) {
+  return ({
+    type: ActionType.RedirectToRoute,
+    payload: url,
+  } as const);
+}
+
 export {
   setGenre,
   setFilms,
   setReviews,
+  redirectToRoute,
   requireAuthorization,
   requireLogout
 };

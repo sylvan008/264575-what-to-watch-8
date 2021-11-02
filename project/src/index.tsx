@@ -10,6 +10,7 @@ import {checkAuthAction, fetchFilms} from './store/api-action';
 import {createApi} from './services/api';
 import {AuthorizationStatus} from './utils/const';
 import {ThunkAppDispatch} from './types/action';
+import {redirect} from './store/middlewares/redirect';
 import App from './components/app/app';
 
 const promo = {
@@ -24,6 +25,7 @@ const store = createStore(
   reducer,
   composeWithDevTools(
     applyMiddleware(thunk.withExtraArgument(api)),
+    applyMiddleware(redirect),
   ),
 );
 
