@@ -5,14 +5,16 @@ import {
   redirectToRoute,
   requireAuthorization,
   requireLogout,
+  setFilm,
   setFilms,
   setGenre,
-  setReviews
+  setReviews,
 } from '../store/action';
 
 export enum ActionType {
   SetGenre = 'app/set_genre',
   SetFilms = 'app/set_films',
+  setFilm = 'app/set_film',
   SetReviews = 'app/set_reviews',
   RequireAuthorization = 'user/require_authorization',
   RequireLogout = 'user/require_logout',
@@ -22,6 +24,7 @@ export enum ActionType {
 export type Actions =
   | ReturnType<typeof setGenre>
   | ReturnType<typeof setFilms>
+  | ReturnType<typeof setFilm>
   | ReturnType<typeof setReviews>
   | ReturnType<typeof redirectToRoute>
   | ReturnType<typeof requireAuthorization>

@@ -23,6 +23,13 @@ function setFilms(films: Film[]) {
   } as const);
 }
 
+function setFilm(film: Film) {
+  return ({
+    type: ActionType.setFilm,
+    payload: film,
+  } as const);
+}
+
 /**
  * Действие сохраняет в состоянии отзывы пользователей
  */
@@ -66,6 +73,7 @@ function redirectToRoute(url: AppRoute) {
 export {
   setGenre,
   setFilms,
+  setFilm,
   setReviews,
   redirectToRoute,
   requireAuthorization,
