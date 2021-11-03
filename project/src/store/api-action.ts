@@ -2,10 +2,19 @@ import {AuthData} from '../types/auth';
 import {Film} from '../types/film';
 import {ThunkActionResult} from '../types/action';
 import {APIRoute, AppRoute, AuthorizationStatus, RouteParams} from '../utils/const';
-import {redirectToRoute, requireAuthorization, requireLogout, setFilm, setFilms, setSimilarFilms} from './action';
+import {
+  redirectToRoute,
+  requireAuthorization,
+  requireLogout,
+  setFilm,
+  setFilms,
+  setReviews,
+  setSimilarFilms,
+} from './action';
 import {dropToken, saveToken, Token} from '../services/token';
 import {adaptFilmToClient} from '../utils/api';
 import {Item} from '../types/item';
+import {Review} from '../types/review';
 
 /**
  * Запрос списка фильмов
@@ -59,4 +68,10 @@ export const fetchSimilarFilms = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Film[]>(APIRoute.SimilarFilms.replace(RouteParams.ID, filmId.toString()));
     dispatch(setSimilarFilms(data));
+  };
+
+export const fetchComments = (filmId: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()));
+    dispatch(setReviews(data));
   };
