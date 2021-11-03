@@ -1,4 +1,5 @@
 import {Film} from '../types/film';
+import {Review} from '../types/review';
 
 /**
  * Адаптирует имена объекта фильма в допустимые для клиента
@@ -27,4 +28,13 @@ export function adaptFilmToClient(data: {[key: string]: any}) {
   delete adaptedFilm['preview_video_link'];
 
   return adaptedFilm as Film;
+}
+
+/**
+ * Адаптирует свойства комментария для клиента
+ */
+export function adaptReviewToClient(data: Review): Review {
+  return Object.assign({}, data, {
+    date: new Date(data.date),
+  });
 }

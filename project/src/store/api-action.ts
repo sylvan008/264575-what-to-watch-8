@@ -12,7 +12,7 @@ import {
   setSimilarFilms
 } from './action';
 import {dropToken, saveToken, Token} from '../services/token';
-import {adaptFilmToClient} from '../utils/api';
+import {adaptFilmToClient, adaptReviewToClient} from '../utils/api';
 import {Review} from '../types/review';
 
 /**
@@ -80,10 +80,11 @@ export const fetchSimilarFilms = (filmId: number): ThunkActionResult =>
 /**
  * Действие запрашивает комментарии к фильму с сервера
  */
-export const fetchComments = (filmId: number): ThunkActionResult =>
+export const fetchReviews = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()));
-    dispatch(setReviews(data));
+    const adaptedData = data.map((review: Review) => adaptReviewToClient(review));
+    dispatch(setReviews(adaptedData));
   };
 
 /**
