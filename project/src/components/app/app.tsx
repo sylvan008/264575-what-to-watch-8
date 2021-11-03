@@ -15,8 +15,6 @@ import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 import Spinner from '../spinner/spinner';
 
-const SIMILAR_MOVIE_COUNT = 4;
-
 const mapStateToProps = ({authorizationStatus, films, isDataLoaded}: State) => ({
   authorizationStatus,
   films,
@@ -46,7 +44,7 @@ function App(props: PropsFromRedux): JSX.Element {
           render={() => <AddReview film={films[0]} />}
         />
         <Route exact path={AppRoute.Film}>
-          <MoviePage film={films[0]} films={films.slice(0, SIMILAR_MOVIE_COUNT)} />
+          <MoviePage />
         </Route>
         <PrivateRoute
           exact
