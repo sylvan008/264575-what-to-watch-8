@@ -1,7 +1,88 @@
-import Logo from '../logo/logo';
+import {ChangeEvent, Dispatch, FormEvent, useState} from 'react';
+import {connect, ConnectedProps} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+import {AxiosError} from 'axios';
+import {Actions, ThunkAppDispatch} from '../../types/action';
+import {AuthData} from '../../types/auth';
+import {loginAction} from '../../store/api-action';
+import {AppRoute, AuthorizationStatus, Messages, ResponseStatusCodes} from '../../utils/const';
+import {classNames, validateEmail, validatePassword} from '../../utils/common';
+import {State} from '../../types/state';
 import Footer from '../footer/footer';
+import Logo from '../logo/logo';
+import SigninMessage from '../signin-message/signin-message';
 
-function SignIn(): JSX.Element {
+const SIGNIN_ERROR_CLASS = 'sign-in__field--error';
+
+function mapStateToProps({authorizationStatus}: State) {
+  return {
+    authorizationStatus,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Actions>) {
+  return {
+    onFormSubmit(authData: AuthData) {
+      return (dispatch as ThunkAppDispatch)(
+        loginAction(authData),
+      );
+    },
+  };
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function SignIn(props: PropsFromRedux): JSX.Element {
+  const {authorizationStatus, onFormSubmit} = props;
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isEmailError, setIsEmailError] = useState(false);
+  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [isAuthError, setIsAuthError] = useState(false);
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return (<Redirect to={AppRoute.Main} />);
+  }
+
+  function formSubmitHandler(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (isEmailError || isPasswordError) {
+      return;
+    }
+    setIsAuthError(false);
+    onFormSubmit({email, password})
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.BadRequest) {
+          setIsAuthError(true);
+        }
+      });
+  }
+
+  function onEmailChange(e: ChangeEvent<HTMLInputElement>) {
+    setIsEmailError(false);
+    const value = e.target.value;
+    setEmail(value);
+    const isEmailInvalid = !validateEmail(value);
+    if (isEmailInvalid) {
+      setIsEmailError(isEmailInvalid);
+    }
+  }
+
+  function onPasswordChange(e: ChangeEvent<HTMLInputElement>) {
+    setIsPasswordError(false);
+    const value = e.target.value;
+    setPassword(value);
+    const isPasswordInvalid = !validatePassword(value);
+    if (isPasswordInvalid) {
+      setIsPasswordError(isPasswordInvalid);
+    }
+  }
+
+  const emailClassNames = classNames('sign-in__field', isEmailError ? SIGNIN_ERROR_CLASS : '');
+  const passwordClassNames = classNames('sign-in__field', isPasswordError ? SIGNIN_ERROR_CLASS : '');
+
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -11,14 +92,37 @@ function SignIn(): JSX.Element {
       </header>
 
       <div className="sign-in user-page__content">
-        <form action="#" className="sign-in__form">
+        <form
+          action="#"
+          className="sign-in__form"
+          onSubmit={formSubmitHandler}
+        >
+          {isEmailError && <SigninMessage text={Messages.EmailInvalid} />}
+          {isPasswordError && <SigninMessage text={Messages.PasswordInvalid} />}
+          {isAuthError && <SigninMessage text={Messages.AuthError} />}
           <div className="sign-in__fields">
-            <div className="sign-in__field">
-              <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email"/>
+            <div className={emailClassNames}>
+              <input
+                className="sign-in__input"
+                type="email"
+                placeholder="Email address"
+                name="user-email"
+                id="user-email"
+                value={email}
+                onChange={onEmailChange}
+              />
               <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>
             </div>
-            <div className="sign-in__field">
-              <input className="sign-in__input" type="password" placeholder="Password" name="user-password" id="user-password"/>
+            <div className={passwordClassNames}>
+              <input
+                className="sign-in__input"
+                type="password"
+                placeholder="Password"
+                name="user-password"
+                id="user-password"
+                value={password}
+                onChange={onPasswordChange}
+              />
               <label className="sign-in__label visually-hidden" htmlFor="user-password">Password</label>
             </div>
           </div>
@@ -33,4 +137,5 @@ function SignIn(): JSX.Element {
   );
 }
 
-export default SignIn;
+export {SignIn};
+export default connector(SignIn);

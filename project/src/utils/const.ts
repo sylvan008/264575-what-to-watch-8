@@ -20,7 +20,7 @@ export enum Genres {
 export enum AppRoute {
   AddReview = '/films/:id/review',
   Film = '/films/:id',
-  Login = '/signin',
+  Login = '/login',
   Main = '/',
   MyList = '/mylist',
   Player = '/player/:id',
@@ -48,6 +48,17 @@ export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
+}
+
+export enum ResponseStatusCodes {
+  BadRequest = 400,
+  NotFound= 404,
+}
+
+export enum Messages  {
+  EmailInvalid = 'Please enter a valid email address',
+  PasswordInvalid = 'Password must be at least 1 letter and 1 digit',
+  AuthError = 'We can’t recognize this email\n and password combination. Please try again.',
 }
 
 /**

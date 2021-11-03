@@ -1,9 +1,10 @@
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../utils/const';
+import {Route, Router as BrowserRouter, Switch} from 'react-router-dom';
+import {AppRoute} from '../../utils/const';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../app';
 import {PropsType} from './types';
 import {State} from '../../types/state';
+import {browserHistory} from '../../services/browser-history';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
 import MoviePage from '../movie-page/movie-page';
@@ -34,7 +35,7 @@ function App(props: PropsFromRedux): JSX.Element {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <MainPage promo={promo} />
@@ -42,7 +43,6 @@ function App(props: PropsFromRedux): JSX.Element {
         <PrivateRoute
           exact
           path={AppRoute.AddReview}
-          authorizationStatus={AuthorizationStatus.Auth}
           render={() => <AddReview film={films[0]} />}
         />
         <Route exact path={AppRoute.Film}>
@@ -51,7 +51,6 @@ function App(props: PropsFromRedux): JSX.Element {
         <PrivateRoute
           exact
           path={AppRoute.MyList}
-          authorizationStatus={AuthorizationStatus.NoAuth}
           render={() => <MyList films={films} />}
         />
         <Route exact path={AppRoute.Player}>
