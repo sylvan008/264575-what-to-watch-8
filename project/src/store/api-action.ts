@@ -58,20 +58,38 @@ export const logoutAction = (): ThunkActionResult =>
     dispatch(requireLogout());
   };
 
+/**
+ * Действие запрашивает с сервера конкретный фильм
+ */
 export const fetchFilm = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Film>(APIRoute.Film.replace(RouteParams.ID, filmId.toString()));
     dispatch(setFilm(data));
   };
 
+/**
+ * Действие запрашивает схожие фильмы с сервера
+ */
 export const fetchSimilarFilms = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Film[]>(APIRoute.SimilarFilms.replace(RouteParams.ID, filmId.toString()));
     dispatch(setSimilarFilms(data));
   };
 
+/**
+ * Действие запрашивает комментарии к фильму с сервера
+ */
 export const fetchComments = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()));
+    dispatch(setReviews(data));
+  };
+
+/**
+ * Действие отправляет комментарий на сервер
+ */
+export const submitReview = ({filmId, review}: {review: Review, filmId: number}): ThunkActionResult =>
+  async (dispatch, _getState, api) : Promise<void> => {
+    const {data} = await api.post<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()), review);
     dispatch(setReviews(data));
   };
