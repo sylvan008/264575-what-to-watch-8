@@ -28,7 +28,7 @@ function setFilms(films: Film[]) {
  */
 function setFilm(film: Film) {
   return ({
-    type: ActionType.setFilm,
+    type: ActionType.SetFilm,
     payload: film,
   } as const);
 }

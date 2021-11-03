@@ -8,13 +8,14 @@ import {
   setFilm,
   setFilms,
   setGenre,
-  setReviews, setSimilarFilms,
+  setReviews,
+  setSimilarFilms
 } from '../store/action';
 
 export enum ActionType {
   SetGenre = 'app/set_genre',
   SetFilms = 'app/set_films',
-  setFilm = 'app/set_film',
+  SetFilm = 'app/set_film',
   SetReviews = 'app/set_reviews',
   SetSimilarFilms = 'app/set_similar_films',
   RequireAuthorization = 'user/require_authorization',

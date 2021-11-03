@@ -9,11 +9,10 @@ import {
   setFilm,
   setFilms,
   setReviews,
-  setSimilarFilms,
+  setSimilarFilms
 } from './action';
 import {dropToken, saveToken, Token} from '../services/token';
 import {adaptFilmToClient} from '../utils/api';
-import {Item} from '../types/item';
 import {Review} from '../types/review';
 
 /**
@@ -64,7 +63,8 @@ export const logoutAction = (): ThunkActionResult =>
 export const fetchFilm = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Film>(APIRoute.Film.replace(RouteParams.ID, filmId.toString()));
-    dispatch(setFilm(data));
+    const adaptedData = adaptFilmToClient(data);
+    dispatch(setFilm(adaptedData));
   };
 
 /**
@@ -73,7 +73,8 @@ export const fetchFilm = (filmId: number): ThunkActionResult =>
 export const fetchSimilarFilms = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Film[]>(APIRoute.SimilarFilms.replace(RouteParams.ID, filmId.toString()));
-    dispatch(setSimilarFilms(data));
+    const adaptedData = data.map((film) => adaptFilmToClient(film));
+    dispatch(setSimilarFilms(adaptedData));
   };
 
 /**
