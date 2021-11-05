@@ -11,6 +11,8 @@ import {createApi} from './services/api';
 import {AuthorizationStatus} from './utils/const';
 import {ThunkAppDispatch} from './types/action';
 import {redirect} from './store/middlewares/redirect';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import App from './components/app/app';
 
 const promo = {
@@ -36,6 +38,7 @@ const store = createStore(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer />
       <App
         promo={promo}
       />
