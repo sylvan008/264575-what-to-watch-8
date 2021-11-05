@@ -2,7 +2,10 @@ import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
-import {AppRoute, RouteParams} from '../../utils/const';
+import {toast} from 'react-toastify';
+import {AxiosError} from 'axios';
+import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
+import {browserHistory} from '../../services/browser-history';
 import {Actions, ThunkAppDispatch} from '../../types/action';
 import {CommentPost} from '../../types/review';
 import {UrlParams} from '../../types/url-params';
@@ -17,6 +20,7 @@ import UserBlock from '../user-block/user-block';
 const RATING_DEFAULT = '8';
 const RATING_MAX = 10;
 const RATING_MIN = 1;
+const REVIEW_SEND_ERROR = 'The comment must not be empty.';
 
 function mapStateToProps({authorizationStatus, film}: State) {
   return {
@@ -104,10 +108,15 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
       },
     })
       .then(() => {
-        setReview('');
-        setRating(RATING_DEFAULT);
-        setIsReviewValid(false);
-        setIsFormSubmit(false);
+        browserHistory.push(AppRoute.Film.replace(RouteParams.ID, id));
+      })
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.BadRequest) {
+          toast.info(REVIEW_SEND_ERROR, {
+            position: 'top-center',
+          });
+          setIsFormSubmit(false);
+        }
       });
   }
 
