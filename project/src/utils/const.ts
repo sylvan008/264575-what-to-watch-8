@@ -73,3 +73,13 @@ export const RouteParams = {
  * Количество карточек фильма по умолчанию
  */
 export const STEP_CARDS_VIEW = 8;
+
+/**
+ * Минимальная длина сообщения в комментарии
+ */
+export const MIN_MESSAGE_LENGTH = 50;
+
+/**
+ * Максимальная длина сообщения в комментарии
+ */
+export const MAX_MESSAGE_LENGTH = 400;

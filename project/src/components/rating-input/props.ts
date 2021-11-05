@@ -4,4 +4,5 @@ export type PropsType = {
   ratingValue: string,
   changeRating: (e: ChangeEvent<HTMLInputElement>) => void,
   checked?: boolean,
+  disabled?: boolean,
 }

@@ -13,7 +13,7 @@ import {
 } from './action';
 import {dropToken, saveToken, Token} from '../services/token';
 import {adaptFilmToClient, adaptReviewToClient} from '../utils/api';
-import {Review} from '../types/review';
+import {CommentPost, Review} from '../types/review';
 
 /**
  * Запрос списка фильмов
@@ -90,8 +90,8 @@ export const fetchReviews = (filmId: number): ThunkActionResult =>
 /**
  * Действие отправляет комментарий на сервер
  */
-export const submitReview = ({filmId, review}: {review: Review, filmId: number}): ThunkActionResult =>
+export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, filmId: number}): ThunkActionResult =>
   async (dispatch, _getState, api) : Promise<void> => {
-    const {data} = await api.post<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()), review);
+    const {data} = await api.post<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()), commentPost);
     dispatch(setReviews(data));
   };

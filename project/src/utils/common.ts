@@ -45,43 +45,8 @@ function classNames(className: string, ...rest: string[]): string {
   return className;
 }
 
-/**
- * Проверяет email на валидность
- */
-function validateEmail(email: string): boolean {
-  if (!email.length) {
-    return false;
-  }
-  const emailTest = /.+?@.+?\..+/;
-
-  return emailTest.test(email);
-}
-
-/**
- * Проверяет пароль на валидность
- */
-function validatePassword(password: string): boolean {
-  if (password.length < 2) {
-    return false;
-  }
-
-  const passwordLetterTest = /[a-z]+?/i;
-  if (!passwordLetterTest.test(password)) {
-    return false;
-  }
-
-  const passwordDigitTest = /\d+?/;
-  if (!passwordDigitTest.test(password)) {
-    return false;
-  }
-
-  return true;
-}
-
 export {
   classNames,
   humanizeRuntime,
-  humanizedRating,
-  validateEmail,
-  validatePassword
+  humanizedRating
 };
