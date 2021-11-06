@@ -1,6 +1,8 @@
-import {AuthorizationStatus} from './const';
+import {AuthorizationStatus, FilmRating} from './const';
 
 const HOUR = 60;
+
+type NormalizedRating = keyof typeof FilmRating;
 
 /**
  * Делает время продолжительности фильма, удобочитаемым для людей
@@ -15,26 +17,8 @@ function humanizeRuntime(duration: number): string {
  * Формирует текстовое представление оценки
  */
 function humanizedRating(rating: number): string {
-  switch (Math.floor(rating)) {
-    case 0:
-    case 1:
-    case 2:
-      return 'Bad';
-    case 3:
-    case 4:
-      return 'Normal';
-    case 5:
-    case 6:
-    case 7:
-      return 'Good';
-    case 8:
-    case 9:
-      return 'Very good';
-    case 10:
-      return 'Awesome';
-    default:
-      return 'Normal';
-  }
+  const normalizeRating: NormalizedRating = Math.trunc(rating) as NormalizedRating;
+  return FilmRating[normalizeRating];
 }
 
 /**
