@@ -24,6 +24,26 @@ function setFilms(films: Film[]) {
 }
 
 /**
+ * Действие сохраняет фильм в хранилище
+ */
+function setFilm(film: Film) {
+  return ({
+    type: ActionType.SetFilm,
+    payload: film,
+  } as const);
+}
+
+/**
+ * Действие сохраняет похожие фильмы
+ */
+function setSimilarFilms(films: Film[]) {
+  return ({
+    type: ActionType.SetSimilarFilms,
+    payload: films,
+  } as const);
+}
+
+/**
  * Действие сохраняет в состоянии отзывы пользователей
  */
 function setReviews(reviews: Review[]) {
@@ -66,7 +86,9 @@ function redirectToRoute(url: AppRoute) {
 export {
   setGenre,
   setFilms,
+  setFilm,
   setReviews,
+  setSimilarFilms,
   redirectToRoute,
   requireAuthorization,
   requireLogout

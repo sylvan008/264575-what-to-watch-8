@@ -3,9 +3,11 @@ import {AuthorizationStatus, Genres} from '../utils/const';
 import {Review} from './review';
 
 export type State = {
-  genre: Genres,
-  films: Film[],
-  reviews: Review[],
   authorizationStatus: AuthorizationStatus,
+  genre: Genres,
+  film: Film | null,
+  films: Film[],
   isDataLoaded: boolean,
+  reviews: Review[],
+  similarFilms: Film[],
 }

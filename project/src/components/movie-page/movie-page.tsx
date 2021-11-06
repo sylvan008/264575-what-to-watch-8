@@ -1,28 +1,86 @@
+import {Dispatch} from '@reduxjs/toolkit';
+import {useEffect} from 'react';
+import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute} from '../../utils/const';
-import {PropsType} from './types';
+import {AxiosError} from 'axios';
+import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
+import {checkIsAuthorization} from '../../utils/common';
+import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
+import {browserHistory} from '../../services/browser-history';
+import {State} from '../../types/state';
+import {Actions, ThunkAppDispatch} from '../../types/action';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import FilmOverview from '../film-overview/film-overview';
 import FilmDetails from '../film-details/film-details';
 import FilmReviews from '../film-reviews/film-reviews';
 import Logo from '../logo/logo';
+import Spinner from '../spinner/spinner';
 import Tabs from '../tabs/tabs';
 import UserBlock from '../user-block/user-block';
+
+const SIMILAR_MOVIE_COUNT = 4;
+
+function mapStateToProps({authorizationStatus, film, reviews, similarFilms}: State) {
+  return {
+    authorizationStatus,
+    film,
+    reviews,
+    similarFilms,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Actions>) {
+  return {
+    loadFilm(filmId: number) {
+      return (dispatch as ThunkAppDispatch)(fetchFilm(filmId))
+        .catch((error: AxiosError) => {
+          if (error.response?.status === ResponseStatusCodes.NotFound) {
+            browserHistory.push(AppRoute.NotFound);
+          }
+        });
+    },
+    loadSimilarFilms(filmId: number) {
+      (dispatch as ThunkAppDispatch)(fetchSimilarFilms(filmId));
+    },
+    loadReviews(filmId: number) {
+      (dispatch as ThunkAppDispatch)(fetchReviews(filmId));
+    },
+  };
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type params = {
   id: string,
 }
 
-function MoviePage({film, films} : PropsType): JSX.Element {
+function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
+  const isAuth = checkIsAuthorization(authorizationStatus);
+
+  useEffect(() => {
+    const filmId = Number(id);
+    loadFilm(filmId)
+      .then(() => {
+        loadSimilarFilms(filmId);
+        loadReviews(filmId);
+      });
+  }, [id, loadFilm]);
+
+  if (!film) {
+    return <Spinner />;
+  }
+
+  const {backgroundImage, genre, name, released, posterImage} = film;
 
   return (
     <>
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
+            <img src={backgroundImage} alt={name}/>
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -35,10 +93,10 @@ function MoviePage({film, films} : PropsType): JSX.Element {
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="film-card__title">{name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{genre}</span>
+                <span className="film-card__year">{released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -54,9 +112,10 @@ function MoviePage({film, films} : PropsType): JSX.Element {
                   </svg>
                   <span>My list</span>
                 </button>
-                <Link to={AppRoute.AddReview.replace(':id', id)} className="btn film-card__button">
-                  Add review
-                </Link>
+                {isAuth &&
+                  <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
+                    Add review
+                  </Link>}
               </div>
             </div>
           </div>
@@ -65,14 +124,14 @@ function MoviePage({film, films} : PropsType): JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327"/>
+              <img src={posterImage} alt={`${name} poster`} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
               <Tabs>
                 <FilmOverview film={film} label="Overview" />
                 <FilmDetails film={film} label="Details" />
-                <FilmReviews reviews={[]} label="Reviews" />
+                <FilmReviews reviews={reviews} label="Reviews" />
               </Tabs>
             </div>
           </div>
@@ -83,7 +142,7 @@ function MoviePage({film, films} : PropsType): JSX.Element {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList films={films} />
+          <FilmsList films={similarFilms.slice(0, SIMILAR_MOVIE_COUNT)} />
         </section>
 
         <Footer />
@@ -92,4 +151,5 @@ function MoviePage({film, films} : PropsType): JSX.Element {
   );
 }
 
-export default MoviePage;
+export {MoviePage};
+export default connector(MoviePage);

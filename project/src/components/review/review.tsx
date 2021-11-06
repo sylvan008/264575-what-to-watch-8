@@ -1,8 +1,9 @@
 import {PropsType} from './types';
+import {dateFormat} from '../../services/date';
 
 function Review({review}: PropsType): JSX.Element {
   const {user, comment, rating, date} = review;
-  const dateString = date.toLocaleDateString();
+  const dateString = dateFormat(date);
   return (
     <div className="review">
       <blockquote className="review__quote">

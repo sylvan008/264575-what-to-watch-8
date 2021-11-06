@@ -4,9 +4,12 @@ type User = Item & {
   name: string,
 }
 
-export type Review = Item & {
-  user: User,
+export type CommentPost = {
   rating: number,
   comment: string,
-  date: Date
+}
+
+export type Review = Item & CommentPost & {
+  user: User,
+  date: Date,
 }

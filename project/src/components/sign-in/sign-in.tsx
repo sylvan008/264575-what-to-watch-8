@@ -5,8 +5,9 @@ import {AxiosError} from 'axios';
 import {Actions, ThunkAppDispatch} from '../../types/action';
 import {AuthData} from '../../types/auth';
 import {loginAction} from '../../store/api-action';
-import {AppRoute, AuthorizationStatus, Messages, ResponseStatusCodes} from '../../utils/const';
-import {classNames, validateEmail, validatePassword} from '../../utils/common';
+import {AppRoute, Messages, ResponseStatusCodes} from '../../utils/const';
+import {checkIsAuthorization, classNames} from '../../utils/common';
+import {validateEmail, validatePassword} from '../../utils/validation';
 import {State} from '../../types/state';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
@@ -42,7 +43,7 @@ function SignIn(props: PropsFromRedux): JSX.Element {
   const [isPasswordError, setIsPasswordError] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
 
-  if (authorizationStatus === AuthorizationStatus.Auth) {
+  if (checkIsAuthorization(authorizationStatus)) {
     return (<Redirect to={AppRoute.Main} />);
   }
 

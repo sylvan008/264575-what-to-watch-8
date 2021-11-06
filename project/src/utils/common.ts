@@ -1,9 +1,24 @@
+import {AuthorizationStatus, FilmRating} from './const';
+
 const HOUR = 60;
 
+type NormalizedRating = keyof typeof FilmRating;
+
+/**
+ * Делает время продолжительности фильма, удобочитаемым для людей
+ */
 function humanizeRuntime(duration: number): string {
   const hours = Math.floor(duration / HOUR);
   const minutes = duration % HOUR;
   return `${hours}h ${minutes}m`;
+}
+
+/**
+ * Формирует текстовое представление оценки
+ */
+function humanizedRating(rating: number): string {
+  const normalizeRating: NormalizedRating = Math.trunc(rating) as NormalizedRating;
+  return FilmRating[normalizeRating];
 }
 
 /**
@@ -17,43 +32,16 @@ function classNames(className: string, ...rest: string[]): string {
 }
 
 /**
- * Проверяет email на валидность
+ * Проверяет статус авторизации пользователя.
+ * Возвращает true, если пользователь авторизован.
  */
-function validateEmail(email: string): boolean {
-  if (!email.length) {
-    return false;
-  }
-  const emailTest = /.+?@.+?\..+/;
-  if (!emailTest.test(email)) {
-    return false;
-  }
-  return true;
-}
-
-/**
- * Проверяет пароль на валидность
- */
-function validatePassword(password: string): boolean {
-  if (password.length < 2) {
-    return false;
-  }
-
-  const passwordLetterTest = /[a-z]+?/i;
-  if (!passwordLetterTest.test(password)) {
-    return false;
-  }
-
-  const passwordDigitTest = /\d+?/;
-  if (!passwordDigitTest.test(password)) {
-    return false;
-  }
-
-  return true;
+function checkIsAuthorization(authorizationStatus: AuthorizationStatus): boolean {
+  return authorizationStatus === AuthorizationStatus.Auth;
 }
 
 export {
   classNames,
+  checkIsAuthorization,
   humanizeRuntime,
-  validateEmail,
-  validatePassword
+  humanizedRating
 };

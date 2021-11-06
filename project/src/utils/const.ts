@@ -1,3 +1,9 @@
+const RATING_BAD = 'Bad';
+const RATING_NORMAL = 'Normal';
+const RATING_GOOD = 'Good';
+const RATING_VERY_GOOD = 'Very good';
+const RATING_AWESOME = 'Awesome';
+
 /**
  * Список жанров фильмов для выбора текущего фильтра по жанрам
  */
@@ -23,6 +29,7 @@ export enum AppRoute {
   Login = '/login',
   Main = '/',
   MyList = '/mylist',
+  NotFound = '/404',
   Player = '/player/:id',
 }
 
@@ -70,6 +77,33 @@ export const RouteParams = {
 };
 
 /**
+ * Перечисление рейтингов фильмов
+ */
+export const FilmRating = {
+  0: RATING_BAD,
+  1: RATING_BAD,
+  2: RATING_BAD,
+  3: RATING_NORMAL,
+  4: RATING_NORMAL,
+  5: RATING_GOOD,
+  6: RATING_GOOD,
+  7: RATING_GOOD,
+  8: RATING_VERY_GOOD,
+  9: RATING_VERY_GOOD,
+  10: RATING_AWESOME,
+};
+
+/**
  * Количество карточек фильма по умолчанию
  */
 export const STEP_CARDS_VIEW = 8;
+
+/**
+ * Минимальная длина сообщения в комментарии
+ */
+export const MIN_MESSAGE_LENGTH = 50;
+
+/**
+ * Максимальная длина сообщения в комментарии
+ */
+export const MAX_MESSAGE_LENGTH = 400;

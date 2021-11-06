@@ -1,6 +1,6 @@
 import {PropsType} from './props';
 
-function RatingInput({ratingValue, changeRating, checked}: PropsType): JSX.Element {
+function RatingInput({ratingValue, changeRating, checked, disabled}: PropsType): JSX.Element {
   return (
     <>
       <input
@@ -11,6 +11,7 @@ function RatingInput({ratingValue, changeRating, checked}: PropsType): JSX.Eleme
         value={ratingValue}
         onChange={changeRating}
         checked={checked}
+        disabled={disabled}
       />
       <label className="rating__label" htmlFor={`star-${ratingValue}`}>Rating ${ratingValue}</label>
     </>
