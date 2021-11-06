@@ -1,20 +1,21 @@
 import {Dispatch} from '@reduxjs/toolkit';
+import {useEffect} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, RouteParams} from '../../utils/const';
+import {AppRoute, RouteParams} from '../../utils/const';
+import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
 import {State} from '../../types/state';
 import {Actions, ThunkAppDispatch} from '../../types/action';
+import {checkIsAuthorization} from '../../utils/common';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import FilmOverview from '../film-overview/film-overview';
 import FilmDetails from '../film-details/film-details';
 import FilmReviews from '../film-reviews/film-reviews';
 import Logo from '../logo/logo';
+import Spinner from '../spinner/spinner';
 import Tabs from '../tabs/tabs';
 import UserBlock from '../user-block/user-block';
-import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
-import {useEffect} from 'react';
-import Spinner from '../spinner/spinner';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
@@ -50,7 +51,7 @@ type params = {
 
 function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
-  const isAuth = authorizationStatus === AuthorizationStatus.Auth;
+  const isAuth = checkIsAuthorization(authorizationStatus);
 
   useEffect(() => {
     const filmId = Number(id);
