@@ -1,3 +1,5 @@
+import {AuthorizationStatus} from './const';
+
 const HOUR = 60;
 
 /**
@@ -45,8 +47,17 @@ function classNames(className: string, ...rest: string[]): string {
   return className;
 }
 
+/**
+ * Проверяет статус авторизации пользователя.
+ * Возвращает true, если пользователь авторизован.
+ */
+function checkIsAuthorization(authorizationStatus: AuthorizationStatus): boolean {
+  return authorizationStatus === AuthorizationStatus.Auth;
+}
+
 export {
   classNames,
+  checkIsAuthorization,
   humanizeRuntime,
   humanizedRating
 };
