@@ -67,7 +67,7 @@ function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadR
         loadSimilarFilms(filmId);
         loadReviews(filmId);
       });
-  }, [id]);
+  }, [id, loadFilm]);
 
   if (!film) {
     return <Spinner />;

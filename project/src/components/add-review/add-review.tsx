@@ -56,7 +56,7 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
   useEffect(() => {
     const filmId = Number(id);
     loadFilm(filmId);
-  }, [id]);
+  }, [id, loadFilm]);
 
   if (!film) {
     return <Spinner />;
