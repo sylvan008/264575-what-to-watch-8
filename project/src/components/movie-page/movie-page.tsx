@@ -1,7 +1,7 @@
 import {Dispatch} from '@reduxjs/toolkit';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute, RouteParams} from '../../utils/const';
+import {AppRoute, AuthorizationStatus, RouteParams} from '../../utils/const';
 import {State} from '../../types/state';
 import {Actions, ThunkAppDispatch} from '../../types/action';
 import FilmsList from '../films-list/films-list';
@@ -18,8 +18,9 @@ import Spinner from '../spinner/spinner';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
-function mapStateToProps({film, reviews, similarFilms}: State) {
+function mapStateToProps({authorizationStatus, film, reviews, similarFilms}: State) {
   return {
+    authorizationStatus,
     film,
     reviews,
     similarFilms,
@@ -47,8 +48,9 @@ type params = {
   id: string,
 }
 
-function MoviePage({film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
+function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
+  const isAuth = authorizationStatus === AuthorizationStatus.Auth;
 
   useEffect(() => {
     const filmId = Number(id);
@@ -100,9 +102,10 @@ function MoviePage({film, loadFilm, loadSimilarFilms, loadReviews, reviews, simi
                   </svg>
                   <span>My list</span>
                 </button>
-                <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
-                  Add review
-                </Link>
+                {isAuth &&
+                  <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
+                    Add review
+                  </Link>}
               </div>
             </div>
           </div>
