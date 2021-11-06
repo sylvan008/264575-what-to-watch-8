@@ -2,11 +2,13 @@ import {Dispatch} from '@reduxjs/toolkit';
 import {useEffect} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute, RouteParams} from '../../utils/const';
+import {AxiosError} from 'axios';
+import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
+import {checkIsAuthorization} from '../../utils/common';
 import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
+import {browserHistory} from '../../services/browser-history';
 import {State} from '../../types/state';
 import {Actions, ThunkAppDispatch} from '../../types/action';
-import {checkIsAuthorization} from '../../utils/common';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import FilmOverview from '../film-overview/film-overview';
@@ -31,7 +33,12 @@ function mapStateToProps({authorizationStatus, film, reviews, similarFilms}: Sta
 function mapDispatchToProps(dispatch: Dispatch<Actions>) {
   return {
     loadFilm(filmId: number) {
-      (dispatch as ThunkAppDispatch)(fetchFilm(filmId));
+      return (dispatch as ThunkAppDispatch)(fetchFilm(filmId))
+        .catch((error: AxiosError) => {
+          if (error.response?.status === ResponseStatusCodes.NotFound) {
+            browserHistory.push(AppRoute.NotFound);
+          }
+        });
     },
     loadSimilarFilms(filmId: number) {
       (dispatch as ThunkAppDispatch)(fetchSimilarFilms(filmId));
@@ -55,9 +62,11 @@ function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadR
 
   useEffect(() => {
     const filmId = Number(id);
-    loadFilm(filmId);
-    loadSimilarFilms(filmId);
-    loadReviews(filmId);
+    loadFilm(filmId)
+      .then(() => {
+        loadSimilarFilms(filmId);
+        loadReviews(filmId);
+      });
   }, [id]);
 
   if (!film) {
