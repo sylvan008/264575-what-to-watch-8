@@ -1,4 +1,4 @@
-import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
@@ -13,13 +13,11 @@ import {State} from '../../types/state';
 import {fetchFilm, submitReview} from '../../store/api-action';
 import {validateTextLength} from '../../utils/validation';
 import Logo from '../logo/logo';
-import RatingInput from '../rating-input/rating-input';
+import RatingInputs from '../rating-inputs/rating-inputs';
 import Spinner from '../spinner/spinner';
 import UserBlock from '../user-block/user-block';
 
 const RATING_DEFAULT = '8';
-const RATING_MAX = 10;
-const RATING_MIN = 1;
 const REVIEW_SEND_ERROR = 'The comment must not be empty.';
 
 function mapStateToProps({authorizationStatus, film}: State) {
@@ -58,31 +56,15 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
     loadFilm(filmId);
   }, [id, loadFilm]);
 
+  const onChangeRating = useCallback((ratingUpdate) => {
+    setRating(ratingUpdate);
+  }, []);
+
   if (!film) {
     return <Spinner />;
   }
 
   const {id: filmId, name, posterImage, backgroundImage} = film;
-
-  function createRatingInputs() {
-    const ratings = [];
-    for (let i = RATING_MAX; i >= RATING_MIN; i--) {
-      ratings.push((
-        <RatingInput
-          ratingValue={`${i}`}
-          changeRating={onChangeRating}
-          key={`rating${i}`}
-          checked={rating === `${i}`}
-          disabled={isFormSubmit}
-        />
-      ));
-    }
-    return ratings;
-  }
-
-  function onChangeRating(e: ChangeEvent<HTMLInputElement>) {
-    setRating(e.target.value);
-  }
 
   function onChangeReview(e: ChangeEvent<HTMLTextAreaElement>) {
     const text = e.target.value;
@@ -159,7 +141,11 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
         >
           <div className="rating">
             <div className="rating__stars">
-              {createRatingInputs()}
+              <RatingInputs
+                currentRating={rating}
+                disabled={isFormSubmit}
+                onChangeRating={onChangeRating}
+              />
             </div>
           </div>
 
