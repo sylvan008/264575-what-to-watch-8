@@ -1,24 +1,18 @@
-import {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
+import {FormEvent, useCallback, useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
-import {toast} from 'react-toastify';
-import {AxiosError} from 'axios';
-import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
-import {browserHistory} from '../../services/browser-history';
+import {AppRoute, RouteParams} from '../../utils/const';
 import {Actions, ThunkAppDispatch} from '../../types/action';
 import {CommentPost} from '../../types/review';
 import {UrlParams} from '../../types/url-params';
 import {State} from '../../types/state';
 import {fetchFilm, submitReview} from '../../store/api-action';
-import {validateTextLength} from '../../utils/validation';
+import {useUserReview} from '../../hooks/use-user-review';
 import Logo from '../logo/logo';
 import RatingInputs from '../rating-inputs/rating-inputs';
 import Spinner from '../spinner/spinner';
 import UserBlock from '../user-block/user-block';
-
-const RATING_DEFAULT = '8';
-const REVIEW_SEND_ERROR = 'The comment must not be empty.';
 
 function mapStateToProps({authorizationStatus, film}: State) {
   return {
@@ -46,10 +40,15 @@ type PropsFormRedux = ConnectedProps<typeof connected>;
  */
 function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.Element {
   const {id}: UrlParams = useParams();
-  const [review, setReview] = useState('');
-  const [rating, setRating] = useState(RATING_DEFAULT);
-  const [isReviewValid, setIsReviewValid] = useState(false);
-  const [isFormSubmit, setIsFormSubmit] = useState(false);
+  const [
+    isFormSubmit,
+    isReviewValid,
+    review,
+    rating,
+    handleRatingChange,
+    handleReviewChange,
+    handleSubmitChange,
+  ] = useUserReview(reviewSubmitHandler);
 
   useEffect(() => {
     const filmId = Number(id);
@@ -57,7 +56,7 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
   }, [id, loadFilm]);
 
   const onChangeRating = useCallback((ratingUpdate) => {
-    setRating(ratingUpdate);
+    handleRatingChange(ratingUpdate);
   }, []);
 
   if (!film) {
@@ -66,40 +65,12 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
 
   const {id: filmId, name, posterImage, backgroundImage} = film;
 
-  function onChangeReview(e: ChangeEvent<HTMLTextAreaElement>) {
-    const text = e.target.value;
-    setReview(text);
-    setIsReviewValid(validateTextLength(text.trim()));
-  }
-
   function onReviewSubmit(e: FormEvent) {
     e.preventDefault();
-    if (isFormSubmit) {
+    if (isFormSubmit || !isReviewValid) {
       return;
     }
-    if (!isReviewValid) {
-      return;
-    }
-
-    setIsFormSubmit(true);
-    reviewSubmitHandler({
-      filmId,
-      commentPost: {
-        rating: Number(rating),
-        comment: review.trim(),
-      },
-    })
-      .then(() => {
-        browserHistory.push(AppRoute.Film.replace(RouteParams.ID, id));
-      })
-      .catch((error: AxiosError) => {
-        if (error.response?.status === ResponseStatusCodes.BadRequest) {
-          toast.info(REVIEW_SEND_ERROR, {
-            position: 'top-center',
-          });
-          setIsFormSubmit(false);
-        }
-      });
+    handleSubmitChange(filmId);
   }
 
   return (
@@ -152,7 +123,7 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
           <div className="add-review__text">
             <textarea
               value={review}
-              onChange={onChangeReview}
+              onChange={(e) => handleReviewChange(e.target.value)}
               className="add-review__textarea"
               name="review-text"
               id="review-text"
