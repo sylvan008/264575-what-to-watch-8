@@ -1,9 +1,9 @@
 import {Middleware} from '@reduxjs/toolkit';
-import {reducer} from '../reducer';
+import {rootReducer} from '../reducer';
 import {ActionType} from '../../types/action';
 import {browserHistory} from '../../services/browser-history';
 
-type Reducer = ReturnType<typeof reducer>;
+type Reducer = ReturnType<typeof rootReducer>;
 
 /**
  * Middleware изменяет browserHistory для совершения перенаправления на переданный url

@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import {applyMiddleware, createStore} from '@reduxjs/toolkit';
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import {reducer} from './store/reducer';
+import {rootReducer} from './store/root-reducer';
 import {requireAuthorization} from './store/action';
 import {checkAuthAction, fetchFilms} from './store/api-action';
 import {createApi} from './services/api';
@@ -24,7 +24,7 @@ const promo = {
 const api = createApi(() => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)));
 
 const store = createStore(
-  reducer,
+  rootReducer,
   composeWithDevTools(
     applyMiddleware(thunk.withExtraArgument(api)),
     applyMiddleware(redirect),
