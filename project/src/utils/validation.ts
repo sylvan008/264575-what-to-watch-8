@@ -1,8 +1,8 @@
+import {MAX_MESSAGE_LENGTH, MIN_MESSAGE_LENGTH} from './const';
+
 /**
  * Проверяет email на валидность
  */
-import {MAX_MESSAGE_LENGTH, MIN_MESSAGE_LENGTH} from './const';
-
 function validateEmail(email: string): boolean {
   if (!email.length) {
     return false;

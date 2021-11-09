@@ -4,7 +4,7 @@ import {Actions, ActionType} from '../../types/action';
 const initialState: AppData = {
   films: [],
   isDataLoaded: false,
-}
+};
 
 const appData = (state = initialState, action: Actions): AppData => {
   switch (action.type) {
@@ -17,6 +17,6 @@ const appData = (state = initialState, action: Actions): AppData => {
     default:
       return state;
   }
-}
+};
 
 export {appData};

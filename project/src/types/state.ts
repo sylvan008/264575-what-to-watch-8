@@ -1,6 +1,7 @@
 import {Film} from './film';
 import {AuthorizationStatus, Genres} from '../utils/const';
 import {Review} from './review';
+import {RootState} from '../store/root-reducer';
 
 export type AppData = {
   films: Film[],
@@ -17,3 +18,5 @@ export type FilmProcess = {
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus,
 }
+
+export type State = RootState;

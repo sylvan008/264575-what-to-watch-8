@@ -7,6 +7,8 @@ import {State} from '../../types/state';
 import {Actions} from '../../types/action';
 import {setGenre} from '../../store/action';
 import {filterFilms, getNextFilmsCount} from '../../app';
+import {getFilms} from '../../store/app-data/selectors';
+import {getCurrentGenre} from '../../store/film-process/selectors';
 import GenresList from '../genres-list/genres-list';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
@@ -14,20 +16,16 @@ import Logo from '../logo/logo';
 import ShowMoreButton from '../show-more-button/show-more-button';
 import UserBlock from '../user-block/user-block';
 
-function mapStateToProps({films, genre}: State) {
-  return {
-    films,
-    activeGenre: genre,
-  };
-}
+const mapStateToProps = (state: State) => ({
+  films: getFilms(state),
+  activeGenre: getCurrentGenre(state),
+});
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>) {
-  return {
-    onChangeGenre(genre: Genres) {
-      dispatch(setGenre(genre));
-    },
-  };
-}
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+  onChangeGenre(genre: Genres) {
+    dispatch(setGenre(genre));
+  },
+});
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

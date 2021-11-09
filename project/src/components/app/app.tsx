@@ -14,11 +14,13 @@ import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 import Spinner from '../spinner/spinner';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getFilms, getIsDataLoaded} from '../../store/app-data/selectors';
 
-const mapStateToProps = ({authorizationStatus, films, isDataLoaded}: State) => ({
-  authorizationStatus,
-  films,
-  isDataLoaded,
+const mapStateToProps = (state: State) => ({
+  authorizationStatus: getAuthorizationStatus(state),
+  films: getFilms(state),
+  isDataLoaded: getIsDataLoaded(state),
 });
 
 const connector = connect(mapStateToProps);

@@ -22,6 +22,6 @@ const filmProcess = (state = initialState, action: Actions): FilmProcess => {
     default:
       return state;
   }
-}
+};
 
 export {filmProcess};

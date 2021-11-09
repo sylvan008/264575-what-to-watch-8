@@ -1,5 +1,5 @@
 import {Middleware} from '@reduxjs/toolkit';
-import {rootReducer} from '../reducer';
+import {rootReducer} from '../root-reducer';
 import {ActionType} from '../../types/action';
 import {browserHistory} from '../../services/browser-history';
 

@@ -4,9 +4,7 @@ import FilmNav from '../film-nav/film-nav';
 
 function Tabs({children}: PropsType):JSX.Element {
   const [activeTab, setActiveTab] = useState(children[0].props.label);
-  function changeTabHandler(label: string) {
-    setActiveTab(label);
-  }
+  const changeTabHandler = (label: string) => setActiveTab(label);
 
   return (
     <>

@@ -9,28 +9,24 @@ import {UrlParams} from '../../types/url-params';
 import {State} from '../../types/state';
 import {fetchFilm, submitReview} from '../../store/api-action';
 import {useUserReview} from '../../hooks/use-user-review';
+import {getFilm} from '../../store/film-process/selectors';
 import Logo from '../logo/logo';
 import RatingInputs from '../rating-inputs/rating-inputs';
 import Spinner from '../spinner/spinner';
 import UserBlock from '../user-block/user-block';
 
-function mapStateToProps({authorizationStatus, film}: State) {
-  return {
-    authorizationStatus,
-    film,
-  };
-}
+const mapStateToProps = (state: State) => ({
+  film: getFilm(state),
+});
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>) {
-  return {
-    reviewSubmitHandler(submitData: {filmId: number, commentPost: CommentPost}) {
-      return (dispatch as ThunkAppDispatch)(submitReview(submitData));
-    },
-    loadFilm(filmId: number) {
-      (dispatch as ThunkAppDispatch)(fetchFilm(filmId));
-    },
-  };
-}
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+  reviewSubmitHandler(submitData: {filmId: number, commentPost: CommentPost}) {
+    return (dispatch as ThunkAppDispatch)(submitReview(submitData));
+  },
+  loadFilm(filmId: number) {
+    (dispatch as ThunkAppDispatch)(fetchFilm(filmId));
+  },
+});
 
 const connected = connect(mapStateToProps, mapDispatchToProps);
 type PropsFormRedux = ConnectedProps<typeof connected>;

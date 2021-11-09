@@ -16,11 +16,11 @@ const userProcess = (state = initialState, action: Actions): UserProcess => {
     case ActionType.RequireLogout:
       return {
         ...state,
-        authorizationStatus: AuthorizationStatus.NoAuth
+        authorizationStatus: AuthorizationStatus.NoAuth,
       };
     default:
       return state;
   }
-}
+};
 
 export {userProcess};
