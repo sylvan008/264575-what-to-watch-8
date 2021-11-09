@@ -1,4 +1,4 @@
-import {AuthorizationStatus, FilmRating} from './const';
+import {FilmRating} from './const';
 
 const HOUR = 60;
 

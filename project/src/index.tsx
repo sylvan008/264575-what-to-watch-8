@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import thunk from 'redux-thunk';
-import {applyMiddleware, createStore} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import {Provider} from 'react-redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
 import {rootReducer} from './store/root-reducer';
 import {requireAuthorization} from './store/action';
 import {checkAuthAction, fetchFilms} from './store/api-action';
@@ -23,13 +21,15 @@ const promo = {
 
 const api = createApi(() => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)));
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(
-    applyMiddleware(thunk.withExtraArgument(api)),
-    applyMiddleware(redirect),
-  ),
-);
+const store = configureStore( {
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      },
+    }).concat(redirect),
+});
 
 // TODO: заглушка для ошибки авторизации
 (store.dispatch as ThunkAppDispatch)(checkAuthAction()).catch(() => (''));
