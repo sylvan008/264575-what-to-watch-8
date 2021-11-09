@@ -1,22 +1,18 @@
 import {AppData} from '../../types/state';
-import {Actions, ActionType} from '../../types/action';
+import {createReducer} from '@reduxjs/toolkit';
+import {setFilms} from '../action';
 
 const initialState: AppData = {
   films: [],
   isDataLoaded: false,
 };
 
-const appData = (state = initialState, action: Actions): AppData => {
-  switch (action.type) {
-    case ActionType.SetFilms:
-      return {
-        ...state,
-        films: action.payload,
-        isDataLoaded: true,
-      };
-    default:
-      return state;
-  }
-};
+const appData = createReducer(initialState, (builder) => {
+  builder
+    .addCase(setFilms, (state, action) => {
+      state.films = action.payload;
+      state.isDataLoaded = true;
+    });
+});
 
 export {appData};
