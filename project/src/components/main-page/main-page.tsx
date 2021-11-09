@@ -4,7 +4,6 @@ import {useCallback, useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
 import {State} from '../../types/state';
-import {Actions} from '../../types/action';
 import {setGenre} from '../../store/action';
 import {filterFilms, getNextFilmsCount} from '../../app';
 import {getFilms} from '../../store/app-data/selectors';
@@ -21,7 +20,7 @@ const mapStateToProps = (state: State) => ({
   activeGenre: getCurrentGenre(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   onChangeGenre(genre: Genres) {
     dispatch(setGenre(genre));
   },

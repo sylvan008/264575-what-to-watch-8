@@ -7,7 +7,6 @@ import {requireAuthorization} from './store/action';
 import {checkAuthAction, fetchFilms} from './store/api-action';
 import {createApi} from './services/api';
 import {AuthorizationStatus} from './utils/const';
-import {ThunkAppDispatch} from './types/action';
 import {redirect} from './store/middlewares/redirect';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,8 +31,8 @@ const store = configureStore( {
 });
 
 // TODO: заглушка для ошибки авторизации
-(store.dispatch as ThunkAppDispatch)(checkAuthAction()).catch(() => (''));
-(store.dispatch as ThunkAppDispatch)(fetchFilms());
+store.dispatch(checkAuthAction()).catch(() => (''));
+store.dispatch(fetchFilms());
 
 ReactDOM.render(
   <React.StrictMode>

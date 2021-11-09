@@ -7,7 +7,7 @@ import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
 import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
 import {browserHistory} from '../../services/browser-history';
 import {State} from '../../types/state';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {getFilm, getReviews, getSimilarFilms} from '../../store/film-process/selectors';
 import {getIsUserAuthorized} from '../../store/user-process/selectors';
 import FilmsList from '../films-list/films-list';
@@ -29,7 +29,7 @@ const mapStateToProps = (state: State) => ({
   similarFilms: getSimilarFilms(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadFilm(filmId: number) {
     return (dispatch as ThunkAppDispatch)(fetchFilm(filmId))
       .catch((error: AxiosError) => {

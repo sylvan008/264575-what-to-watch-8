@@ -3,7 +3,7 @@ import {Link, useParams} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
 import {AppRoute, RouteParams} from '../../utils/const';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {CommentPost} from '../../types/review';
 import {UrlParams} from '../../types/url-params';
 import {State} from '../../types/state';
@@ -19,7 +19,7 @@ const mapStateToProps = (state: State) => ({
   film: getFilm(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   reviewSubmitHandler(submitData: {filmId: number, commentPost: CommentPost}) {
     return (dispatch as ThunkAppDispatch)(submitReview(submitData));
   },

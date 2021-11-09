@@ -1,9 +1,9 @@
-import {Dispatch} from 'react';
+import {Dispatch} from '@reduxjs/toolkit';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../utils/const';
 import {State} from '../../types/state';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {logoutAction} from '../../store/api-action';
 import {getIsUserAuthorized} from '../../store/user-process/selectors';
 
@@ -11,7 +11,7 @@ const mapStateToProps = (state: State) => ({
   isUserAuthorized: getIsUserAuthorized(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   onLogoutClick() {
     (dispatch as ThunkAppDispatch)(logoutAction());
   },

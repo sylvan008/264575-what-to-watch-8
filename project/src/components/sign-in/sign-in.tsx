@@ -1,8 +1,9 @@
-import {ChangeEvent, Dispatch, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useState} from 'react';
+import {Dispatch} from '@reduxjs/toolkit';
 import {connect, ConnectedProps} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {AxiosError} from 'axios';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {AuthData} from '../../types/auth';
 import {loginAction} from '../../store/api-action';
 import {getIsUserAuthorized} from '../../store/user-process/selectors';
@@ -20,7 +21,7 @@ const mapStateToProps = (state: State) => ({
   isUserAuthorized: getIsUserAuthorized(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   onFormSubmit(authData: AuthData) {
     return (dispatch as ThunkAppDispatch)(
       loginAction(authData),
