@@ -1,44 +1,32 @@
-import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {FormEvent, useCallback, useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
-import {toast} from 'react-toastify';
-import {AxiosError} from 'axios';
-import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
-import {browserHistory} from '../../services/browser-history';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {AppRoute, RouteParams} from '../../utils/const';
+import {ThunkAppDispatch} from '../../types/action';
 import {CommentPost} from '../../types/review';
 import {UrlParams} from '../../types/url-params';
 import {State} from '../../types/state';
 import {fetchFilm, submitReview} from '../../store/api-action';
-import {validateTextLength} from '../../utils/validation';
+import {useUserReview} from '../../hooks/use-user-review';
+import {getFilm} from '../../store/film-process/selectors';
 import Logo from '../logo/logo';
-import RatingInput from '../rating-input/rating-input';
+import RatingInputs from '../rating-inputs/rating-inputs';
 import Spinner from '../spinner/spinner';
 import UserBlock from '../user-block/user-block';
 
-const RATING_DEFAULT = '8';
-const RATING_MAX = 10;
-const RATING_MIN = 1;
-const REVIEW_SEND_ERROR = 'The comment must not be empty.';
+const mapStateToProps = (state: State) => ({
+  film: getFilm(state),
+});
 
-function mapStateToProps({authorizationStatus, film}: State) {
-  return {
-    authorizationStatus,
-    film,
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<Actions>) {
-  return {
-    reviewSubmitHandler(submitData: {filmId: number, commentPost: CommentPost}) {
-      return (dispatch as ThunkAppDispatch)(submitReview(submitData));
-    },
-    loadFilm(filmId: number) {
-      (dispatch as ThunkAppDispatch)(fetchFilm(filmId));
-    },
-  };
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  reviewSubmitHandler(submitData: {filmId: number, commentPost: CommentPost}) {
+    return (dispatch as ThunkAppDispatch)(submitReview(submitData));
+  },
+  loadFilm(filmId: number) {
+    (dispatch as ThunkAppDispatch)(fetchFilm(filmId));
+  },
+});
 
 const connected = connect(mapStateToProps, mapDispatchToProps);
 type PropsFormRedux = ConnectedProps<typeof connected>;
@@ -48,15 +36,24 @@ type PropsFormRedux = ConnectedProps<typeof connected>;
  */
 function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.Element {
   const {id}: UrlParams = useParams();
-  const [review, setReview] = useState('');
-  const [rating, setRating] = useState(RATING_DEFAULT);
-  const [isReviewValid, setIsReviewValid] = useState(false);
-  const [isFormSubmit, setIsFormSubmit] = useState(false);
+  const [
+    isFormSubmit,
+    isReviewValid,
+    review,
+    rating,
+    handleRatingChange,
+    handleReviewChange,
+    handleSubmitChange,
+  ] = useUserReview(reviewSubmitHandler);
 
   useEffect(() => {
     const filmId = Number(id);
     loadFilm(filmId);
   }, [id, loadFilm]);
+
+  const onChangeRating = useCallback((ratingUpdate) => {
+    handleRatingChange(ratingUpdate);
+  }, [handleRatingChange]);
 
   if (!film) {
     return <Spinner />;
@@ -64,60 +61,12 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
 
   const {id: filmId, name, posterImage, backgroundImage} = film;
 
-  function createRatingInputs() {
-    const ratings = [];
-    for (let i = RATING_MAX; i >= RATING_MIN; i--) {
-      ratings.push((
-        <RatingInput
-          ratingValue={`${i}`}
-          changeRating={onChangeRating}
-          key={`rating${i}`}
-          checked={rating === `${i}`}
-          disabled={isFormSubmit}
-        />
-      ));
-    }
-    return ratings;
-  }
-
-  function onChangeRating(e: ChangeEvent<HTMLInputElement>) {
-    setRating(e.target.value);
-  }
-
-  function onChangeReview(e: ChangeEvent<HTMLTextAreaElement>) {
-    const text = e.target.value;
-    setReview(text);
-    setIsReviewValid(validateTextLength(text.trim()));
-  }
-
   function onReviewSubmit(e: FormEvent) {
     e.preventDefault();
-    if (isFormSubmit) {
+    if (isFormSubmit || !isReviewValid) {
       return;
     }
-    if (!isReviewValid) {
-      return;
-    }
-
-    setIsFormSubmit(true);
-    reviewSubmitHandler({
-      filmId,
-      commentPost: {
-        rating: Number(rating),
-        comment: review.trim(),
-      },
-    })
-      .then(() => {
-        browserHistory.push(AppRoute.Film.replace(RouteParams.ID, id));
-      })
-      .catch((error: AxiosError) => {
-        if (error.response?.status === ResponseStatusCodes.BadRequest) {
-          toast.info(REVIEW_SEND_ERROR, {
-            position: 'top-center',
-          });
-          setIsFormSubmit(false);
-        }
-      });
+    handleSubmitChange(filmId);
   }
 
   return (
@@ -159,14 +108,18 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
         >
           <div className="rating">
             <div className="rating__stars">
-              {createRatingInputs()}
+              <RatingInputs
+                currentRating={rating}
+                isDisabled={isFormSubmit}
+                onChangeRating={onChangeRating}
+              />
             </div>
           </div>
 
           <div className="add-review__text">
             <textarea
               value={review}
-              onChange={onChangeReview}
+              onChange={(e) => handleReviewChange(e.target.value)}
               className="add-review__textarea"
               name="review-text"
               id="review-text"

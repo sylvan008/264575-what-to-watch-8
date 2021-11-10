@@ -1,12 +1,14 @@
-import {ChangeEvent, Dispatch, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useState} from 'react';
+import {Dispatch} from '@reduxjs/toolkit';
 import {connect, ConnectedProps} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {AxiosError} from 'axios';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {AuthData} from '../../types/auth';
 import {loginAction} from '../../store/api-action';
+import {getIsUserAuthorized} from '../../store/user-process/selectors';
 import {AppRoute, Messages, ResponseStatusCodes} from '../../utils/const';
-import {checkIsAuthorization, classNames} from '../../utils/common';
+import {classNames} from '../../utils/common';
 import {validateEmail, validatePassword} from '../../utils/validation';
 import {State} from '../../types/state';
 import Footer from '../footer/footer';
@@ -15,35 +17,29 @@ import SigninMessage from '../signin-message/signin-message';
 
 const SIGNIN_ERROR_CLASS = 'sign-in__field--error';
 
-function mapStateToProps({authorizationStatus}: State) {
-  return {
-    authorizationStatus,
-  };
-}
+const mapStateToProps = (state: State) => ({
+  isUserAuthorized: getIsUserAuthorized(state),
+});
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>) {
-  return {
-    onFormSubmit(authData: AuthData) {
-      return (dispatch as ThunkAppDispatch)(
-        loginAction(authData),
-      );
-    },
-  };
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  onFormSubmit(authData: AuthData) {
+    return (dispatch as ThunkAppDispatch)(
+      loginAction(authData),
+    );
+  },
+});
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-function SignIn(props: PropsFromRedux): JSX.Element {
-  const {authorizationStatus, onFormSubmit} = props;
-
+function SignIn({isUserAuthorized, onFormSubmit}: PropsFromRedux): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailError, setIsEmailError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
 
-  if (checkIsAuthorization(authorizationStatus)) {
+  if (isUserAuthorized) {
     return (<Redirect to={AppRoute.Main} />);
   }
 

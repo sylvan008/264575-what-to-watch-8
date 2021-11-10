@@ -4,11 +4,12 @@ import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
 import {AxiosError} from 'axios';
 import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
-import {checkIsAuthorization} from '../../utils/common';
 import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
 import {browserHistory} from '../../services/browser-history';
 import {State} from '../../types/state';
-import {Actions, ThunkAppDispatch} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
+import {getFilm, getReviews, getSimilarFilms} from '../../store/film-process/selectors';
+import {getIsUserAuthorized} from '../../store/user-process/selectors';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import FilmOverview from '../film-overview/film-overview';
@@ -21,33 +22,29 @@ import UserBlock from '../user-block/user-block';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
-function mapStateToProps({authorizationStatus, film, reviews, similarFilms}: State) {
-  return {
-    authorizationStatus,
-    film,
-    reviews,
-    similarFilms,
-  };
-}
+const mapStateToProps = (state: State) => ({
+  isUserAuthorized: getIsUserAuthorized(state),
+  film: getFilm(state),
+  reviews: getReviews(state),
+  similarFilms: getSimilarFilms(state),
+});
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>) {
-  return {
-    loadFilm(filmId: number) {
-      return (dispatch as ThunkAppDispatch)(fetchFilm(filmId))
-        .catch((error: AxiosError) => {
-          if (error.response?.status === ResponseStatusCodes.NotFound) {
-            browserHistory.push(AppRoute.NotFound);
-          }
-        });
-    },
-    loadSimilarFilms(filmId: number) {
-      (dispatch as ThunkAppDispatch)(fetchSimilarFilms(filmId));
-    },
-    loadReviews(filmId: number) {
-      (dispatch as ThunkAppDispatch)(fetchReviews(filmId));
-    },
-  };
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  loadFilm(filmId: number) {
+    return (dispatch as ThunkAppDispatch)(fetchFilm(filmId))
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.NotFound) {
+          browserHistory.push(AppRoute.NotFound);
+        }
+      });
+  },
+  loadSimilarFilms(filmId: number) {
+    (dispatch as ThunkAppDispatch)(fetchSimilarFilms(filmId));
+  },
+  loadReviews(filmId: number) {
+    (dispatch as ThunkAppDispatch)(fetchReviews(filmId));
+  },
+});
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -56,9 +53,8 @@ type params = {
   id: string,
 }
 
-function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
+function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
-  const isAuth = checkIsAuthorization(authorizationStatus);
 
   useEffect(() => {
     const filmId = Number(id);
@@ -67,7 +63,7 @@ function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadR
         loadSimilarFilms(filmId);
         loadReviews(filmId);
       });
-  }, [id, loadFilm]);
+  }, [id, loadFilm, loadSimilarFilms, loadReviews]);
 
   if (!film) {
     return <Spinner />;
@@ -112,7 +108,7 @@ function MoviePage({authorizationStatus, film, loadFilm, loadSimilarFilms, loadR
                   </svg>
                   <span>My list</span>
                 </button>
-                {isAuth &&
+                {isUserAuthorized &&
                   <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
                     Add review
                   </Link>}

@@ -1,3 +1,4 @@
+import {createAction} from '@reduxjs/toolkit';
 import {ActionType} from '../types/action';
 import {Film} from '../types/film';
 import {AppRoute, AuthorizationStatus, Genres} from '../utils/const';
@@ -6,82 +7,78 @@ import {Review} from '../types/review';
 /**
  * Действие сохраняет в состоянии выбранный жанр
  */
-function setGenre(genre: Genres) {
-  return ({
-    type: ActionType.SetGenre,
+const setGenre = createAction(
+  ActionType.SetGenre,
+  (genre: Genres) => ({
     payload: genre,
-  } as const);
-}
+  }),
+);
+
 
 /**
  * Действие сохраняет в состоянии фильмы
  */
-function setFilms(films: Film[]) {
-  return ({
-    type: ActionType.SetFilms,
+const setFilms = createAction(
+  ActionType.SetFilms,
+  (films: Film[]) => ({
     payload: films,
-  } as const);
-}
+  }),
+);
 
 /**
  * Действие сохраняет фильм в хранилище
  */
-function setFilm(film: Film) {
-  return ({
-    type: ActionType.SetFilm,
+const setFilm = createAction(
+  ActionType.SetFilm,
+  (film: Film) => ({
     payload: film,
-  } as const);
-}
+  }),
+);
 
 /**
  * Действие сохраняет похожие фильмы
  */
-function setSimilarFilms(films: Film[]) {
-  return ({
-    type: ActionType.SetSimilarFilms,
-    payload: films,
-  } as const);
-}
+const setSimilarFilms = createAction(
+  ActionType.SetSimilarFilms,
+  (similarFilms: Film[]) => ({
+    payload: similarFilms,
+  }),
+);
 
 /**
  * Действие сохраняет в состоянии отзывы пользователей
  */
-function setReviews(reviews: Review[]) {
-  return ({
-    type: ActionType.SetReviews,
+const setReviews = createAction(
+  ActionType.SetReviews,
+  (reviews: Review[]) => ({
     payload: reviews,
-  } as const);
-}
+  }),
+);
 
 /**
  * Действие устанавливает статус авторизации пользователя, как авторизован
  */
-function requireAuthorization(authorizationStatus: AuthorizationStatus) {
-  return ({
-    type: ActionType.RequireAuthorization,
+const requireAuthorization = createAction(
+  ActionType.RequireAuthorization,
+  (authorizationStatus: AuthorizationStatus) => ({
     payload: authorizationStatus,
-  } as const);
-}
+  }),
+);
 
 /**
  * Действие устанавливает статус авторизации пользователя, как не авторизован
  */
-function requireLogout() {
-  return ({
-    type: ActionType.RequireLogout,
-    payload: AuthorizationStatus.NoAuth,
-  } as const);
-}
+const requireLogout = createAction(ActionType.RequireLogout);
 
 /**
  * Действие для оповещения redux о необходимости переадресовать пользователя
  */
-function redirectToRoute(url: AppRoute) {
-  return ({
-    type: ActionType.RedirectToRoute,
+const redirectToRoute = createAction(
+  ActionType.RedirectToRoute,
+  (url: AppRoute) => ({
     payload: url,
-  } as const);
-}
+  }),
+);
 
 export {
   setGenre,

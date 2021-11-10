@@ -1,16 +1,7 @@
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
 import {State} from './state';
-import {
-  redirectToRoute,
-  requireAuthorization,
-  requireLogout,
-  setFilm,
-  setFilms,
-  setGenre,
-  setReviews,
-  setSimilarFilms
-} from '../store/action';
+import {Action} from '@reduxjs/toolkit';
 
 export enum ActionType {
   SetGenre = 'app/set_genre',
@@ -23,15 +14,5 @@ export enum ActionType {
   RedirectToRoute = 'app/redirect',
 }
 
-export type Actions =
-  | ReturnType<typeof setGenre>
-  | ReturnType<typeof setFilms>
-  | ReturnType<typeof setFilm>
-  | ReturnType<typeof setReviews>
-  | ReturnType<typeof setSimilarFilms>
-  | ReturnType<typeof redirectToRoute>
-  | ReturnType<typeof requireAuthorization>
-  | ReturnType<typeof requireLogout>;
-
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
-export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>
