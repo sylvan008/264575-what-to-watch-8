@@ -1,8 +1,7 @@
 import {FilmRating} from './const';
+import {NormalizedRating} from '../types/review';
 
 const HOUR = 60;
-
-type NormalizedRating = keyof typeof FilmRating;
 
 /**
  * Делает время продолжительности фильма, удобочитаемым для людей
