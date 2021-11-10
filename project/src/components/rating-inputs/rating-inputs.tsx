@@ -4,7 +4,7 @@ import {PropsType} from './types';
 
 const RATING_MAX = 10;
 
-function RatingInputs({currentRating, disabled, onChangeRating}: PropsType): JSX.Element {
+function RatingInputs({currentRating, isDisabled, onChangeRating}: PropsType): JSX.Element {
   const handleRatingChange = (e: ChangeEvent<HTMLInputElement>) => onChangeRating(e.target.value);
 
   const ratings = new Array(RATING_MAX).fill(null);
@@ -18,7 +18,7 @@ function RatingInputs({currentRating, disabled, onChangeRating}: PropsType): JSX
             changeRating={handleRatingChange}
             key={`rating${rating}`}
             checked={currentRating === `${rating}`}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         );
       })}

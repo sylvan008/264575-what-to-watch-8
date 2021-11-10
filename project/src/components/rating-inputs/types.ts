@@ -1,5 +1,5 @@
 export type PropsType = {
   currentRating: string,
-  disabled: boolean,
+  isDisabled: boolean,
   onChangeRating: (rating: string) => void,
 }

@@ -53,7 +53,7 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
 
   const onChangeRating = useCallback((ratingUpdate) => {
     handleRatingChange(ratingUpdate);
-  }, []);
+  }, [handleRatingChange]);
 
   if (!film) {
     return <Spinner />;
@@ -110,7 +110,7 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
             <div className="rating__stars">
               <RatingInputs
                 currentRating={rating}
-                disabled={isFormSubmit}
+                isDisabled={isFormSubmit}
                 onChangeRating={onChangeRating}
               />
             </div>
