@@ -37,7 +37,10 @@ function validatePassword(password: string): boolean {
  * Проверяет длину строки, чтобы оно было в пределах установленного диапазона
  */
 function validateTextLength(text: string, min = MIN_MESSAGE_LENGTH, max = MAX_MESSAGE_LENGTH): boolean {
-  return text.length > min && text.length <= max;
+  if (min > max) {
+    [min, max] = [max, min];
+  }
+  return text.length >= min && text.length <= max;
 }
 
 export {
