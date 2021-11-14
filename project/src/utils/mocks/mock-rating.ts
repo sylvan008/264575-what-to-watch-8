@@ -1,11 +1,13 @@
 import faker from 'faker';
-import {stringify} from 'querystring';
 import {FilmRating, RATING_MAX, RATING_MIN} from '../const';
 import {NormalizedRating} from '../../types/review';
 
 const PRECISION = 1;
 
-export const getUserRating = () => faker.datatype.number({
+/**
+ * Создаёт искусственные данные, имитирующие рейтинг от пользователя
+ */
+export const getUserRating = (): number => faker.datatype.number({
   min: RATING_MIN,
   max: RATING_MAX,
 });
@@ -23,4 +25,4 @@ export const getMockRating = (): [rating: number, stringRating: string] => {
   });
 
   return [rating, FilmRating[normalizedRating]];
-}
+};
