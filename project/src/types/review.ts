@@ -10,8 +10,12 @@ export type CommentPost = {
   comment: string,
 }
 
-export type Review = Item & CommentPost & {
+export type ReviewAdaptedToServer = Item & CommentPost & {
   user: User,
+  date: string,
+}
+
+export type Review = Omit<ReviewAdaptedToServer, 'date'> & {
   date: Date,
 }
 
