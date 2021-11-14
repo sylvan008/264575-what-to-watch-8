@@ -118,3 +118,8 @@ export const UNKNOWN_ACTION = 'UNKNOWN_ACTION';
  */
 export const RATING_MIN = 0;
 export const RATING_MAX = 10;
+
+/**
+ * Имя свойства для хранения токена авторизации
+ */
+export const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';

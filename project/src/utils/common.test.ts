@@ -1,6 +1,5 @@
 import {humanizedRating, humanizeRuntime} from './common';
 import {getMockRating} from './mocks/mock-rating';
-import {FilmRating} from './const';
 
 describe('Function: humanizeRuntime', () => {
   let minutes = 178;

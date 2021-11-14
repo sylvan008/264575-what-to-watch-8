@@ -41,7 +41,7 @@ describe('Function: validateTextLength', () => {
   const max = 5;
   let text = 'abcd';
 
-  it ('should return "true" when message\'s length ', () => {
+  it ('should return "true" when message\'s length', () => {
     expect(validateTextLength(text, min, max)).toBe(true);
     // Меняем местами min и max
     expect(validateTextLength(text, max, min)).toBe(true);

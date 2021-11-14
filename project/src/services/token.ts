@@ -1,8 +1,8 @@
-const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';
-
 /**
  * Токен авторизации
  */
+import {AUTH_TOKEN_KEY_NAME} from '../utils/const';
+
 export type Token = string;
 
 /**

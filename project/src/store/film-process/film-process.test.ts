@@ -49,7 +49,7 @@ describe('Reducer: filmProcess', () => {
       });
   });
 
-  it('should update genre', () => {
+  it('should update similarFilms', () => {
     const similarFilms = [createMockFilm(), createMockFilm(), createMockFilm()];
     const genreAction = {
       type: ActionType.SetSimilarFilms,

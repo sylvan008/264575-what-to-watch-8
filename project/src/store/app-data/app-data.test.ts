@@ -24,7 +24,7 @@ describe('Reducer: appData', () => {
     const filmsAction = {
       type: ActionType.SetFilms,
       payload: films,
-    }
+    };
 
     expect(appData(initialState, filmsAction))
       .toEqual({
