@@ -24,3 +24,10 @@ export function getNextFilmsCount(filmListLength: number, currentCount = 0, step
 export function isCheckedAuth(authorizationStatus: AuthorizationStatus): boolean {
   return authorizationStatus === AuthorizationStatus.Unknown;
 }
+
+
+export const promo = {
+  name: 'The Grand Budapest Hotel',
+  genre: 'Drama',
+  release: 2014,
+};

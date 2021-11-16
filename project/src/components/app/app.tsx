@@ -1,10 +1,9 @@
-import {Route, Router as BrowserRouter, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {AppRoute} from '../../utils/const';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../app';
 import {PropsType} from './types';
 import {State} from '../../types/state';
-import {browserHistory} from '../../services/browser-history';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
 import MoviePage from '../movie-page/movie-page';
@@ -35,35 +34,33 @@ function App(props: PropsFromRedux): JSX.Element {
   }
 
   return (
-    <BrowserRouter history={browserHistory}>
-      <Switch>
-        <Route exact path={AppRoute.Main}>
-          <MainPage promo={promo} />
-        </Route>
-        <PrivateRoute
-          exact
-          path={AppRoute.AddReview}
-          render={() => <AddReview />}
-        />
-        <Route exact path={AppRoute.Film}>
-          <MoviePage />
-        </Route>
-        <PrivateRoute
-          exact
-          path={AppRoute.MyList}
-          render={() => <MyList films={films} />}
-        />
-        <Route exact path={AppRoute.Player}>
-          <Player film={films[0]} />
-        </Route>
-        <Route exact path={AppRoute.Login}>
-          <SignIn />
-        </Route>
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route exact path={AppRoute.Main}>
+        <MainPage promo={promo} />
+      </Route>
+      <PrivateRoute
+        exact
+        path={AppRoute.AddReview}
+        render={() => <AddReview />}
+      />
+      <Route exact path={AppRoute.Film}>
+        <MoviePage />
+      </Route>
+      <PrivateRoute
+        exact
+        path={AppRoute.MyList}
+        render={() => <MyList films={films} />}
+      />
+      <Route exact path={AppRoute.Player}>
+        <Player />
+      </Route>
+      <Route exact path={AppRoute.Login}>
+        <SignIn />
+      </Route>
+      <Route>
+        <NotFound />
+      </Route>
+    </Switch>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Router} from 'react-router-dom';
 import {configureStore} from '@reduxjs/toolkit';
 import {Provider} from 'react-redux';
 import {rootReducer} from './store/root-reducer';
@@ -9,14 +10,10 @@ import {createApi} from './services/api';
 import {AuthorizationStatus} from './utils/const';
 import {redirect} from './store/middlewares/redirect';
 import {ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {browserHistory} from './services/browser-history';
+import {promo} from './app';
 import App from './components/app/app';
-
-const promo = {
-  name: 'The Grand Budapest Hotel',
-  genre: 'Drama',
-  release: 2014,
-};
+import 'react-toastify/dist/ReactToastify.css';
 
 const api = createApi(() => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)));
 
@@ -37,10 +34,10 @@ store.dispatch(fetchFilms());
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ToastContainer />
-      <App
-        promo={promo}
-      />
+      <Router history={browserHistory}>
+        <ToastContainer />
+        <App promo={promo} />
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'));
