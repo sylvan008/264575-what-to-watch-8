@@ -1,7 +1,7 @@
-import {PropsType} from './types';
+import {createMockFilm} from '../../utils/mocks/create-mock-film';
 
-function Player({film}: PropsType): JSX.Element {
-  const {name} = film;
+function Player(): JSX.Element {
+  const {name} = createMockFilm();
   return (
     <div className="player">
       <video src="#" className="player__video" poster="img/player-poster.jpg" />
