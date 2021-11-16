@@ -1,4 +1,5 @@
 import {Item} from './item';
+import {FilmRating} from '../utils/const';
 
 type User = Item & {
   name: string,
@@ -9,7 +10,13 @@ export type CommentPost = {
   comment: string,
 }
 
-export type Review = Item & CommentPost & {
+export type ReviewAdaptedToServer = Item & CommentPost & {
   user: User,
+  date: string,
+}
+
+export type Review = Omit<ReviewAdaptedToServer, 'date'> & {
   date: Date,
 }
+
+export type NormalizedRating = keyof typeof FilmRating;

@@ -1,8 +1,8 @@
-import {FilmRating} from './const';
+import {APIRoute, FilmRating} from './const';
+import {NormalizedRating} from '../types/review';
+import {RouteParamsValues} from '../types/url-params';
 
 const HOUR = 60;
-
-type NormalizedRating = keyof typeof FilmRating;
 
 /**
  * Делает время продолжительности фильма, удобочитаемым для людей
@@ -31,8 +31,19 @@ function classNames(className: string, ...rest: string[]): string {
   return className;
 }
 
+/**
+ * Заменяет в пути параметры на переданное значение
+ */
+function replaceRouteParams(route: APIRoute, param: RouteParamsValues, replace: string | number): string {
+  if (typeof replace  === 'number') {
+    replace = replace.toString();
+  }
+  return route.replace(param, replace);
+}
+
 export {
   classNames,
   humanizeRuntime,
-  humanizedRating
+  humanizedRating,
+  replaceRouteParams
 };

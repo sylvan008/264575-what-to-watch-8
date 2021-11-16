@@ -1,5 +1,5 @@
 import {AuthData} from '../types/auth';
-import {Film} from '../types/film';
+import {Film, FilmAdaptedToServer} from '../types/film';
 import {ThunkActionResult} from '../types/action';
 import {APIRoute, AppRoute, AuthorizationStatus, RouteParams} from '../utils/const';
 import {
@@ -13,14 +13,15 @@ import {
 } from './action';
 import {dropToken, saveToken, Token} from '../services/token';
 import {adaptFilmToClient, adaptReviewToClient} from '../utils/api';
-import {CommentPost, Review} from '../types/review';
+import {CommentPost, ReviewAdaptedToServer} from '../types/review';
+import {replaceRouteParams} from '../utils/common';
 
 /**
  * Запрос списка фильмов
  */
 export const fetchFilms = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const {data} = await api.get<Film[]>(APIRoute.Films);
+    const {data} = await api.get<FilmAdaptedToServer[]>(APIRoute.Films);
     const adaptedData = data.map((film) => adaptFilmToClient(film));
     dispatch(setFilms(adaptedData));
   };
@@ -62,7 +63,7 @@ export const logoutAction = (): ThunkActionResult =>
  */
 export const fetchFilm = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const {data} = await api.get<Film>(APIRoute.Film.replace(RouteParams.ID, filmId.toString()));
+    const {data} = await api.get<FilmAdaptedToServer>(replaceRouteParams(APIRoute.Film, RouteParams.ID, filmId));
     const adaptedData = adaptFilmToClient(data);
     dispatch(setFilm(adaptedData));
   };
@@ -72,7 +73,7 @@ export const fetchFilm = (filmId: number): ThunkActionResult =>
  */
 export const fetchSimilarFilms = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const {data} = await api.get<Film[]>(APIRoute.SimilarFilms.replace(RouteParams.ID, filmId.toString()));
+    const {data} = await api.get<Film[]>(replaceRouteParams(APIRoute.SimilarFilms, RouteParams.ID, filmId));
     const adaptedData = data.map((film) => adaptFilmToClient(film));
     dispatch(setSimilarFilms(adaptedData));
   };
@@ -82,8 +83,8 @@ export const fetchSimilarFilms = (filmId: number): ThunkActionResult =>
  */
 export const fetchReviews = (filmId: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const {data} = await api.get<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()));
-    const adaptedData = data.map((review: Review) => adaptReviewToClient(review));
+    const {data} = await api.get<ReviewAdaptedToServer[]>(replaceRouteParams(APIRoute.Comments, RouteParams.FILM_ID, filmId));
+    const adaptedData = data.map((review) => adaptReviewToClient(review));
     dispatch(setReviews(adaptedData));
   };
 
@@ -92,6 +93,10 @@ export const fetchReviews = (filmId: number): ThunkActionResult =>
  */
 export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, filmId: number}): ThunkActionResult =>
   async (dispatch, _getState, api) : Promise<void> => {
-    const {data} = await api.post<Review[]>(APIRoute.Comments.replace(RouteParams.FILM_ID, filmId.toString()), commentPost);
-    dispatch(setReviews(data));
+    const {data} = await api.post<ReviewAdaptedToServer[]>(
+      replaceRouteParams(APIRoute.Comments, RouteParams.FILM_ID, filmId),
+      commentPost,
+    );
+    const adaptedData = data.map((review) => adaptReviewToClient(review));
+    dispatch(setReviews(adaptedData));
   };

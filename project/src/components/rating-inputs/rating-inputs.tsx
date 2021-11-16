@@ -1,8 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import RatingInput from '../rating-input/rating-input';
 import {PropsType} from './types';
-
-const RATING_MAX = 10;
+import {RATING_MAX} from '../../utils/const';
 
 function RatingInputs({currentRating, isDisabled, onChangeRating}: PropsType): JSX.Element {
   const handleRatingChange = (e: ChangeEvent<HTMLInputElement>) => onChangeRating(e.target.value);
@@ -17,8 +16,8 @@ function RatingInputs({currentRating, isDisabled, onChangeRating}: PropsType): J
             ratingValue={`${rating}`}
             changeRating={handleRatingChange}
             key={`rating${rating}`}
-            checked={currentRating === `${rating}`}
-            disabled={isDisabled}
+            isChecked={currentRating === `${rating}`}
+            isDisabled={isDisabled}
           />
         );
       })}

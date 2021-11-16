@@ -107,3 +107,19 @@ export const MIN_MESSAGE_LENGTH = 50;
  * Максимальная длина сообщения в комментарии
  */
 export const MAX_MESSAGE_LENGTH = 400;
+
+/**
+ * Утилитарная константа, для тестирования
+ */
+export const UNKNOWN_ACTION = 'UNKNOWN_ACTION';
+
+/**
+ * Минимальное и максимальное значения рейтинга фильма
+ */
+export const RATING_MIN = 0;
+export const RATING_MAX = 10;
+
+/**
+ * Имя свойства для хранения токена авторизации
+ */
+export const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';

@@ -59,7 +59,7 @@ function SignIn({isUserAuthorized, onFormSubmit}: PropsFromRedux): JSX.Element {
 
   function onEmailChange(e: ChangeEvent<HTMLInputElement>) {
     setIsEmailError(false);
-    const value = e.target.value;
+    const value = e.target.value.trim();
     setEmail(value);
     const isEmailInvalid = !validateEmail(value);
     if (isEmailInvalid) {

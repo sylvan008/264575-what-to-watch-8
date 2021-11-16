@@ -1,10 +1,10 @@
 import {Film} from '../types/film';
-import {Review} from '../types/review';
+import {Review, ReviewAdaptedToServer} from '../types/review';
 
 /**
  * Адаптирует имена объекта фильма в допустимые для клиента
  */
-export function adaptFilmToClient(data: {[key: string]: any}) {
+export function adaptFilmToClient(data: {[key: string]: any}): Film {
   const adaptedFilm = Object.assign({}, data, {
     posterImage: data['poster_image'],
     previewImage: data['preview_image'],
@@ -33,7 +33,7 @@ export function adaptFilmToClient(data: {[key: string]: any}) {
 /**
  * Адаптирует свойства комментария для клиента
  */
-export function adaptReviewToClient(data: Review): Review {
+export function adaptReviewToClient(data: ReviewAdaptedToServer): Review {
   return Object.assign({}, data, {
     date: new Date(data.date),
   });
