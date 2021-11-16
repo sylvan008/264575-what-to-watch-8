@@ -2,7 +2,6 @@ import {render, screen} from '@testing-library/react';
 import RatingInput from './rating-input';
 
 const RATING_VALUE = '10';
-const CHECKED = 'checked';
 
 describe('Component: RatingInput', () => {
   const changeRatingMock = jest.fn();

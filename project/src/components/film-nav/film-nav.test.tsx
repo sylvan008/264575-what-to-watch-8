@@ -1,6 +1,5 @@
 import {render, screen} from '@testing-library/react';
 import FilmNav from './film-nav';
-import {filmProcess} from '../../store/film-process/film-process';
 
 const LABEL_FIRST = 'label 1';
 const LABEL_SECOND = 'label 2';

@@ -3,8 +3,6 @@ import FilmDetails from './film-details';
 import {createMockFilm} from '../../utils/mocks/create-mock-film';
 import {humanizeRuntime} from '../../utils/common';
 
-const STARRING_REGEXP = /starring/i;
-
 describe('Component: FilmDetail', () => {
   const labelFake = 'label 1';
   const filmFake = createMockFilm();
@@ -12,7 +10,7 @@ describe('Component: FilmDetail', () => {
   const humanizedRuntime = humanizeRuntime(runTime);
 
   it('show render correctly', () => {
-    const starringRegexp = new RegExp(starring[0], 'i')
+    const starringRegexp = new RegExp(starring[0], 'i');
 
     render(<FilmDetails label={labelFake} film={filmFake} />);
 

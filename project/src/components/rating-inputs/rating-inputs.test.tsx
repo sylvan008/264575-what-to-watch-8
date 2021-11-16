@@ -12,7 +12,7 @@ describe('Component: RatingInputs', () => {
       .join('|'),
   );
 
-  let isDisabled = false;
+  const isDisabled = false;
 
   it('show render correctly', () => {
     render(<RatingInputs currentRating={currentRating} isDisabled={isDisabled} onChangeRating={onChangeRatingMock} />);

@@ -6,7 +6,7 @@ const LINK_ROLE = 'link';
 
 describe('Component: GenresList', () => {
   const onChangeGenreMock = jest.fn();
-  const activeGenre = Genres.Crime
+  const activeGenre = Genres.Crime;
   const genres = Object.values(Genres);
 
   it('show render correctly', () => {
