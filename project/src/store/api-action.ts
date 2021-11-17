@@ -8,6 +8,7 @@ import {
   requireLogout,
   setFilm,
   setFilms,
+  setPromo,
   setReviews,
   setSimilarFilms
 } from './action';
@@ -99,4 +100,16 @@ export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, f
     );
     const adaptedData = data.map((review) => adaptReviewToClient(review));
     dispatch(setReviews(adaptedData));
+  };
+
+
+/**
+ * Действие запрашивает promo фильм с сервер
+ */
+export const fetchPromo = (): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<FilmAdaptedToServer>(APIRoute.Promo);
+    const {backgroundImage, genre, name, id, released, posterImage} = adaptFilmToClient(data);
+
+    dispatch(setPromo({genre, name, id, released, posterImage, backgroundImage}));
   };

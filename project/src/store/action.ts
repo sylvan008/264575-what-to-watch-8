@@ -3,6 +3,7 @@ import {ActionType} from '../types/action';
 import {Film} from '../types/film';
 import {AppRoute, AuthorizationStatus, Genres} from '../utils/const';
 import {Review} from '../types/review';
+import {Promo} from '../types/promo';
 
 /**
  * Действие сохраняет в состоянии выбранный жанр
@@ -80,11 +81,25 @@ const redirectToRoute = createAction(
   }),
 );
 
+/**
+ * Действие сохраняет в состоянии промо фильм
+ */
+const setPromo = createAction(
+  ActionType.SetPromo,
+  (promo: Promo) => ({
+    payload: promo,
+  }),
+);
+
+const setIsDataLoaded = createAction(ActionType.SetIsDataLoaded);
+
 export {
   setGenre,
   setFilms,
   setFilm,
+  setIsDataLoaded,
   setReviews,
+  setPromo,
   setSimilarFilms,
   redirectToRoute,
   requireAuthorization,

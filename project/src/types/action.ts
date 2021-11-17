@@ -7,6 +7,8 @@ export enum ActionType {
   SetGenre = 'app/set_genre',
   SetFilms = 'app/set_films',
   SetFilm = 'app/set_film',
+  SetPromo = 'app/set_promo',
+  SetIsDataLoaded= 'app/set_is_data_loaded',
   SetReviews = 'app/set_reviews',
   SetSimilarFilms = 'app/set_similar_films',
   RequireAuthorization = 'user/require_authorization',

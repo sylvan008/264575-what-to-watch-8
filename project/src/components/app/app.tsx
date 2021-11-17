@@ -2,7 +2,6 @@ import {Route, Switch} from 'react-router-dom';
 import {AppRoute} from '../../utils/const';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../app';
-import {PropsType} from './types';
 import {State} from '../../types/state';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
@@ -24,10 +23,10 @@ const mapStateToProps = (state: State) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector> & PropsType;
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function App(props: PropsFromRedux): JSX.Element {
-  const {authorizationStatus, promo, films, isDataLoaded} = props;
+  const {authorizationStatus, films, isDataLoaded} = props;
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return <Spinner />;
@@ -36,7 +35,7 @@ function App(props: PropsFromRedux): JSX.Element {
   return (
     <Switch>
       <Route exact path={AppRoute.Main}>
-        <MainPage promo={promo} />
+        <MainPage />
       </Route>
       <PrivateRoute
         exact
