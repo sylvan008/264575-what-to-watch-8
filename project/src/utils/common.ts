@@ -1,4 +1,4 @@
-import {APIRoute, FilmRating} from './const';
+import {APIRoute, AppRoute, FilmRating} from './const';
 import {NormalizedRating} from '../types/review';
 import {RouteParamsValues} from '../types/url-params';
 
@@ -34,7 +34,7 @@ function classNames(className: string, ...rest: string[]): string {
 /**
  * Заменяет в пути параметры на переданное значение
  */
-function replaceRouteParams(route: APIRoute, param: RouteParamsValues, replace: string | number): string {
+function replaceRouteParams(route: APIRoute | AppRoute, param: RouteParamsValues, replace: string | number): string {
   if (typeof replace  === 'number') {
     replace = replace.toString();
   }
