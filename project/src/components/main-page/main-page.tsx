@@ -1,5 +1,5 @@
 import {PropsType} from './types';
-import {Genres} from '../../utils/const';
+import {Genres, GENRES_COUNT_MAX} from '../../utils/const';
 import {useCallback, useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
@@ -40,7 +40,13 @@ type ConnectedComponentProps = PropsFormRedux & PropsType;
  */
 function MainPage(props: ConnectedComponentProps): JSX.Element {
   const {promo, films, activeGenre, onChangeGenre} = props;
-  const genres = Object.values(Genres) as Genres[];
+  // const genres = Object.values(Genres) as Genres[];
+  const uniqGenres = [...new Set(films.map((film) => film.genre))].sort();
+  const genres = [
+    Genres.AllGenres,
+    ...uniqGenres,
+  ]
+    .slice(0, GENRES_COUNT_MAX) as Genres[];
 
   const [filteredFilms, setFilteredFilms] = useState(filterFilms(films, activeGenre));
   const [showFilmsCount, setShowFilmsCount] = useState(getNextFilmsCount(filteredFilms.length));

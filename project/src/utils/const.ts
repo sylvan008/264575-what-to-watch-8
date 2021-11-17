@@ -123,3 +123,5 @@ export const RATING_MAX = 10;
  * Имя свойства для хранения токена авторизации
  */
 export const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';
+
+export const GENRES_COUNT_MAX = 10;
