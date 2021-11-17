@@ -19,6 +19,9 @@ import Logo from '../logo/logo';
 import Spinner from '../spinner/spinner';
 import Tabs from '../tabs/tabs';
 import UserBlock from '../user-block/user-block';
+import PlayButton from '../play-button/play-button';
+import MyListButton from '../my-list-button/my-list-button';
+import {replaceRouteParams} from '../../utils/common';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
@@ -70,6 +73,8 @@ function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadRevi
   }
 
   const {backgroundImage, genre, name, released, posterImage} = film;
+  const onPlayClick = () => browserHistory.push(replaceRouteParams(AppRoute.Player, RouteParams.ID, id));
+
 
   return (
     <>
@@ -96,22 +101,14 @@ function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadRevi
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s" />
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add" />
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <PlayButton onPlayClick={onPlayClick} />
                 {isUserAuthorized &&
-                  <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
-                    Add review
-                  </Link>}
+                  <>
+                    <MyListButton />
+                    <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
+                      Add review
+                    </Link>
+                  </>}
               </div>
             </div>
           </div>

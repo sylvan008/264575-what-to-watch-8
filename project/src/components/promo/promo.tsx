@@ -1,6 +1,13 @@
 import {PropsType} from './types';
+import MyListButton from '../my-list-button/my-list-button';
+import PlayButton from '../play-button/play-button';
+import {browserHistory} from '../../services/browser-history';
+import {replaceRouteParams} from '../../utils/common';
+import {AppRoute, RouteParams} from '../../utils/const';
 
 function Promo({promo, children}: PropsType): JSX.Element {
+  const onPlayClick = () => browserHistory.push(replaceRouteParams(AppRoute.Player, RouteParams.ID, promo.id));
+
   return (
     <>
       <div className="film-card__bg">
@@ -23,18 +30,8 @@ function Promo({promo, children}: PropsType): JSX.Element {
             </p>
 
             <div className="film-card__buttons">
-              <button className="btn btn--play film-card__button" type="button">
-                <svg viewBox="0 0 19 19" width="19" height="19">
-                  <use xlinkHref="#play-s" />
-                </svg>
-                <span>Play</span>
-              </button>
-              <button className="btn btn--list film-card__button" type="button">
-                <svg viewBox="0 0 19 20" width="19" height="20">
-                  <use xlinkHref="#add" />
-                </svg>
-                <span>My list</span>
-              </button>
+              <PlayButton onPlayClick={onPlayClick} />
+              <MyListButton />
             </div>
           </div>
         </div>
