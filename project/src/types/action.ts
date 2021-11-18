@@ -5,6 +5,7 @@ import {Action} from '@reduxjs/toolkit';
 
 export enum ActionType {
   SetGenre = 'app/set_genre',
+  SetFavoriteFilms = 'app/set_favorite_films',
   SetFilms = 'app/set_films',
   SetFilm = 'app/set_film',
   SetPromo = 'app/set_promo',

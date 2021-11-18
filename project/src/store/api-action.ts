@@ -6,6 +6,7 @@ import {
   redirectToRoute,
   requireAuthorization,
   requireLogout,
+  setFavoriteFilms,
   setFilm,
   setFilms,
   setPromo,
@@ -87,6 +88,16 @@ export const fetchReviews = (filmId: number): ThunkActionResult =>
     const {data} = await api.get<ReviewAdaptedToServer[]>(replaceRouteParams(APIRoute.Comments, RouteParams.FILM_ID, filmId));
     const adaptedData = data.map((review) => adaptReviewToClient(review));
     dispatch(setReviews(adaptedData));
+  };
+
+/**
+ * Действие запрашивает список фильмов "к просмотру"
+ */
+export const fetchFavoriteFilms = (): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<FilmAdaptedToServer[]>(APIRoute.Favorite);
+    const adaptedFilms = data.map((film) => adaptFilmToClient(film));
+    dispatch(setFavoriteFilms(adaptedFilms));
   };
 
 /**

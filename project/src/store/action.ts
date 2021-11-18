@@ -93,8 +93,19 @@ const setPromo = createAction(
 
 const setIsDataLoaded = createAction(ActionType.SetIsDataLoaded);
 
+/**
+ * Действие сохраняет список фильмов "К просмотру"
+ */
+const setFavoriteFilms = createAction(
+  ActionType.SetFavoriteFilms,
+  (favoriteFilms: Film[]) => ({
+    payload: favoriteFilms,
+  }),
+);
+
 export {
   setGenre,
+  setFavoriteFilms,
   setFilms,
   setFilm,
   setIsDataLoaded,
