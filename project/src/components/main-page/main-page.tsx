@@ -1,4 +1,4 @@
-import {Genres, GENRES_COUNT_MAX} from '../../utils/const';
+import {AppRoute, Genres, GENRES_COUNT_MAX, ResponseStatusCodes} from '../../utils/const';
 import {useCallback, useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
@@ -15,6 +15,10 @@ import Promo from '../promo/promo';
 import ShowMoreButton from '../show-more-button/show-more-button';
 import UserBlock from '../user-block/user-block';
 import Spinner from '../spinner/spinner';
+import {ThunkAppDispatch} from '../../types/action';
+import {submitPromoFavoriteStatus} from '../../store/api-action';
+import {AxiosError} from 'axios';
+import {browserHistory} from '../../services/browser-history';
 
 const mapStateToProps = (state: State) => ({
   films: getFilms(state),
@@ -25,6 +29,14 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   onChangeGenre(genre: Genres) {
     dispatch(setGenre(genre));
+  },
+  onChangePromoFavoriteStatus(filmId: number, status: number) {
+    (dispatch as ThunkAppDispatch)(submitPromoFavoriteStatus(filmId, status))
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.NotAuthorized) {
+          browserHistory.push(AppRoute.Login);
+        }
+      });
   },
 });
 
@@ -41,7 +53,13 @@ type ConnectedComponentProps = PropsFormRedux;
  * - Кнопка - "Show more". Зависит от показанных карточек фильмов.
  */
 function MainPage(props: ConnectedComponentProps): JSX.Element {
-  const {promo, films, activeGenre, onChangeGenre} = props;
+  const {
+    activeGenre,
+    films,
+    promo,
+    onChangeGenre,
+    onChangePromoFavoriteStatus,
+  } = props;
 
   // const genres = Object.values(Genres) as Genres[];
   const uniqGenres = [...new Set(films.map((film) => film.genre))].sort();
@@ -82,7 +100,10 @@ function MainPage(props: ConnectedComponentProps): JSX.Element {
   return (
     <>
       <section className="film-card">
-        <Promo promo={promo}>
+        <Promo
+          promo={promo}
+          onChangePromoFavoriteStatus={onChangePromoFavoriteStatus}
+        >
           <h1 className="visually-hidden">WTW</h1>
 
           <header className="page-header film-card__head">

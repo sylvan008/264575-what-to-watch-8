@@ -4,7 +4,7 @@ import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
 import {AxiosError} from 'axios';
 import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
-import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
+import {fetchFilm, fetchReviews, fetchSimilarFilms, submitFilmFavoriteStatus} from '../../store/api-action';
 import {browserHistory} from '../../services/browser-history';
 import {State} from '../../types/state';
 import {ThunkAppDispatch} from '../../types/action';
@@ -47,6 +47,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadReviews(filmId: number) {
     (dispatch as ThunkAppDispatch)(fetchReviews(filmId));
   },
+  onChangePromoFavoriteStatus(filmId: number, status: number) {
+    (dispatch as ThunkAppDispatch)(submitFilmFavoriteStatus(filmId, status))
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.NotAuthorized) {
+          browserHistory.push(AppRoute.Login);
+        }
+      });
+  },
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -56,7 +64,17 @@ type params = {
   id: string,
 }
 
-function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
+function MoviePage(
+  {
+    isUserAuthorized,
+    film,
+    loadFilm,
+    loadSimilarFilms,
+    loadReviews,
+    reviews,
+    similarFilms,
+    onChangePromoFavoriteStatus,
+  }: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
 
   useEffect(() => {
@@ -102,13 +120,14 @@ function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadRevi
 
               <div className="film-card__buttons">
                 <PlayButton onPlayClick={onPlayClick} />
+                <MyListButton
+                  isInMyList={film.isFavorite}
+                  onChangeMyList={(status) => onChangePromoFavoriteStatus(film.id, status)}
+                />
                 {isUserAuthorized &&
-                  <>
-                    <MyListButton />
-                    <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
-                      Add review
-                    </Link>
-                  </>}
+                  <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
+                    Add review
+                  </Link>}
               </div>
             </div>
           </div>

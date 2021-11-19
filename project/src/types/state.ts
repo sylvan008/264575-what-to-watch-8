@@ -19,6 +19,7 @@ export type FilmProcess = {
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus,
+  favoriteFilms: Film[],
 }
 
 export type State = RootState;

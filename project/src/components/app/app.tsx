@@ -13,11 +13,10 @@ import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 import Spinner from '../spinner/spinner';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {getFilms, getIsDataLoaded} from '../../store/app-data/selectors';
+import {getIsDataLoaded} from '../../store/app-data/selectors';
 
 const mapStateToProps = (state: State) => ({
   authorizationStatus: getAuthorizationStatus(state),
-  films: getFilms(state),
   isDataLoaded: getIsDataLoaded(state),
 });
 
@@ -26,7 +25,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function App(props: PropsFromRedux): JSX.Element {
-  const {authorizationStatus, films, isDataLoaded} = props;
+  const {authorizationStatus, isDataLoaded} = props;
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return <Spinner />;
@@ -48,7 +47,7 @@ function App(props: PropsFromRedux): JSX.Element {
       <PrivateRoute
         exact
         path={AppRoute.MyList}
-        render={() => <MyList films={films} />}
+        render={() => <MyList />}
       />
       <Route exact path={AppRoute.Player}>
         <Player />

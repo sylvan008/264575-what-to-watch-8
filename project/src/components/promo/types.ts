@@ -1,6 +1,7 @@
 import {Promo} from '../../types/promo';
 
 export type PropsType = {
-  promo: Promo,
   children?: JSX.Element[],
+  promo: Promo,
+  onChangePromoFavoriteStatus: (filmId: number, status: number) => void,
 }

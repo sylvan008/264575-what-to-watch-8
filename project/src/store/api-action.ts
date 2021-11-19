@@ -120,7 +120,34 @@ export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, f
 export const fetchPromo = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<FilmAdaptedToServer>(APIRoute.Promo);
-    const {backgroundImage, genre, name, id, released, posterImage} = adaptFilmToClient(data);
+    const {backgroundImage, genre, name, id, isFavorite, released, posterImage} = adaptFilmToClient(data);
 
-    dispatch(setPromo({genre, name, id, released, posterImage, backgroundImage}));
+    dispatch(setPromo({genre, name, id, isFavorite, released, posterImage, backgroundImage}));
+  };
+
+export const submitFilmFavoriteStatus = (filmId: number, status: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.post<FilmAdaptedToServer>(
+      replaceRouteParams(
+        replaceRouteParams(APIRoute.ChangeFavoriteStatus, RouteParams.FILM_ID, filmId) as APIRoute,
+        RouteParams.STATUS,
+        status,
+      ),
+    );
+
+    dispatch(setFilm(adaptFilmToClient(data)));
+  };
+
+export const submitPromoFavoriteStatus = (filmId: number, status: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.post<FilmAdaptedToServer>(
+      replaceRouteParams(
+        replaceRouteParams(APIRoute.ChangeFavoriteStatus, RouteParams.FILM_ID, filmId) as APIRoute,
+        RouteParams.STATUS,
+        status,
+      ),
+    );
+    const {backgroundImage, genre, name, id, isFavorite, released, posterImage} = adaptFilmToClient(data);
+
+    dispatch(setPromo({backgroundImage, genre, name, id, isFavorite, released, posterImage}));
   };

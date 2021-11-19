@@ -5,7 +5,7 @@ import {browserHistory} from '../../services/browser-history';
 import {replaceRouteParams} from '../../utils/common';
 import {AppRoute, RouteParams} from '../../utils/const';
 
-function Promo({promo, children}: PropsType): JSX.Element {
+function Promo({promo, children, onChangePromoFavoriteStatus}: PropsType): JSX.Element {
   const onPlayClick = () => browserHistory.push(replaceRouteParams(AppRoute.Player, RouteParams.ID, promo.id));
 
   return (
@@ -31,7 +31,10 @@ function Promo({promo, children}: PropsType): JSX.Element {
 
             <div className="film-card__buttons">
               <PlayButton onPlayClick={onPlayClick} />
-              <MyListButton />
+              <MyListButton
+                isInMyList={promo.isFavorite}
+                onChangeMyList={(status) => onChangePromoFavoriteStatus(promo.id, status)}
+              />
             </div>
           </div>
         </div>
