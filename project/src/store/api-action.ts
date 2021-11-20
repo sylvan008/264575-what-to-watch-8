@@ -120,9 +120,8 @@ export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, f
 export const fetchPromo = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<FilmAdaptedToServer>(APIRoute.Promo);
-    const {backgroundImage, genre, name, id, isFavorite, released, posterImage} = adaptFilmToClient(data);
 
-    dispatch(setPromo({genre, name, id, isFavorite, released, posterImage, backgroundImage}));
+    dispatch(setPromo(adaptFilmToClient(data)));
   };
 
 export const submitFilmFavoriteStatus = (filmId: number, status: number): ThunkActionResult =>
@@ -147,7 +146,6 @@ export const submitPromoFavoriteStatus = (filmId: number, status: number): Thunk
         status,
       ),
     );
-    const {backgroundImage, genre, name, id, isFavorite, released, posterImage} = adaptFilmToClient(data);
 
-    dispatch(setPromo({backgroundImage, genre, name, id, isFavorite, released, posterImage}));
+    dispatch(setPromo(adaptFilmToClient(data)));
   };

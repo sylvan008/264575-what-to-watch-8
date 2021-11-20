@@ -3,17 +3,16 @@ import {AppRoute} from '../../utils/const';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../app';
 import {State} from '../../types/state';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getIsDataLoaded} from '../../store/app-data/selectors';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
 import MoviePage from '../movie-page/movie-page';
 import MyList from '../my-list/my-list';
 import NotFound from '../not-found/not-found';
-import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 import Spinner from '../spinner/spinner';
-import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {getIsDataLoaded} from '../../store/app-data/selectors';
 
 const mapStateToProps = (state: State) => ({
   authorizationStatus: getAuthorizationStatus(state),
@@ -49,9 +48,6 @@ function App(props: PropsFromRedux): JSX.Element {
         path={AppRoute.MyList}
         render={() => <MyList />}
       />
-      <Route exact path={AppRoute.Player}>
-        <Player />
-      </Route>
       <Route exact path={AppRoute.Login}>
         <SignIn />
       </Route>

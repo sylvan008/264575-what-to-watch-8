@@ -30,7 +30,6 @@ export enum AppRoute {
   Main = '/',
   MyList = '/mylist',
   NotFound = '/404',
-  Player = '/player/:id',
 }
 
 /**

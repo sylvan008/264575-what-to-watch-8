@@ -1,15 +1,25 @@
 import {PropsType} from './types';
 import MyListButton from '../my-list-button/my-list-button';
+import {useState} from 'react';
 import PlayButton from '../play-button/play-button';
-import {browserHistory} from '../../services/browser-history';
-import {replaceRouteParams} from '../../utils/common';
-import {AppRoute, RouteParams} from '../../utils/const';
+import Player from '../player/player';
+import Portal from '../portal/portal';
 
+/**
+ * Компонент для отображения информации о промо фильме
+ */
 function Promo({promo, children, onChangePromoFavoriteStatus}: PropsType): JSX.Element {
-  const onPlayClick = () => browserHistory.push(replaceRouteParams(AppRoute.Player, RouteParams.ID, promo.id));
+  const [isPlay, setIsPlay] = useState(false);
+  const onPlayClick = () => setIsPlay(true);
+  const onPlayerStop = () => setIsPlay(false);
 
   return (
     <>
+      {isPlay && (
+        <Portal>
+          <Player film={promo} onStopClick={onPlayerStop} />
+        </Portal>
+      )}
       <div className="film-card__bg">
         <img src={promo.backgroundImage} alt="The Grand Budapest Hotel"/>
       </div>

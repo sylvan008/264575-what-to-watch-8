@@ -1,5 +1,5 @@
 import {Dispatch} from '@reduxjs/toolkit';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
 import {AxiosError} from 'axios';
@@ -15,13 +15,13 @@ import Footer from '../footer/footer';
 import FilmOverview from '../film-overview/film-overview';
 import FilmDetails from '../film-details/film-details';
 import FilmReviews from '../film-reviews/film-reviews';
+import MyListButton from '../my-list-button/my-list-button';
 import Logo from '../logo/logo';
+import Player from '../player/player';
+import PlayButton from '../play-button/play-button';
 import Spinner from '../spinner/spinner';
 import Tabs from '../tabs/tabs';
 import UserBlock from '../user-block/user-block';
-import PlayButton from '../play-button/play-button';
-import MyListButton from '../my-list-button/my-list-button';
-import {replaceRouteParams} from '../../utils/common';
 
 const SIMILAR_MOVIE_COUNT = 4;
 
@@ -64,6 +64,9 @@ type params = {
   id: string,
 }
 
+/**
+ * Компонент для подробного отображения информации о фильме
+ */
 function MoviePage(
   {
     isUserAuthorized,
@@ -76,6 +79,9 @@ function MoviePage(
     onChangePromoFavoriteStatus,
   }: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
+  const [isPlay, setIsPlay] = useState(false);
+  const onPlayClick = () => setIsPlay(true);
+  const onPlayerStop = () => setIsPlay(false);
 
   useEffect(() => {
     const filmId = Number(id);
@@ -91,11 +97,10 @@ function MoviePage(
   }
 
   const {backgroundImage, genre, name, released, posterImage} = film;
-  const onPlayClick = () => browserHistory.push(replaceRouteParams(AppRoute.Player, RouteParams.ID, id));
-
 
   return (
     <>
+      {isPlay && <Player film={film} onStopClick={onPlayerStop} />}
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
