@@ -11,6 +11,7 @@ describe('Reducer: appData', () => {
     initialState = {
       films: [],
       isDataLoaded: false,
+      promo: null,
     };
   });
 
@@ -28,8 +29,9 @@ describe('Reducer: appData', () => {
 
     expect(appData(initialState, filmsAction))
       .toEqual({
+        ...initialState,
         films,
-        isDataLoaded: true,
+        isDataLoaded: false,
       });
   });
 });
