@@ -1,35 +1,49 @@
-import {PropsType} from './types';
-import {Genres} from '../../utils/const';
+import {AppRoute, Genres, GENRES_COUNT_MAX, ResponseStatusCodes} from '../../utils/const';
 import {useCallback, useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Dispatch} from '@reduxjs/toolkit';
 import {State} from '../../types/state';
 import {setGenre} from '../../store/action';
 import {filterFilms, getNextFilmsCount} from '../../app';
-import {getFilms} from '../../store/app-data/selectors';
+import {getFilms, getPromo} from '../../store/app-data/selectors';
 import {getCurrentGenre} from '../../store/film-process/selectors';
 import GenresList from '../genres-list/genres-list';
 import FilmsList from '../films-list/films-list';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
+import Promo from '../promo/promo';
 import ShowMoreButton from '../show-more-button/show-more-button';
 import UserBlock from '../user-block/user-block';
+import Spinner from '../spinner/spinner';
+import {ThunkAppDispatch} from '../../types/action';
+import {submitPromoFavoriteStatus} from '../../store/api-action';
+import {AxiosError} from 'axios';
+import {browserHistory} from '../../services/browser-history';
 
 const mapStateToProps = (state: State) => ({
   films: getFilms(state),
   activeGenre: getCurrentGenre(state),
+  promo: getPromo(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   onChangeGenre(genre: Genres) {
     dispatch(setGenre(genre));
   },
+  onChangePromoFavoriteStatus(filmId: number, status: number) {
+    (dispatch as ThunkAppDispatch)(submitPromoFavoriteStatus(filmId, status))
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.NotAuthorized) {
+          browserHistory.push(AppRoute.Login);
+        }
+      });
+  },
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFormRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFormRedux & PropsType;
+type ConnectedComponentProps = PropsFormRedux;
 
 /**
  * Главная страница приложения. Состоит из:
@@ -39,8 +53,21 @@ type ConnectedComponentProps = PropsFormRedux & PropsType;
  * - Кнопка - "Show more". Зависит от показанных карточек фильмов.
  */
 function MainPage(props: ConnectedComponentProps): JSX.Element {
-  const {promo, films, activeGenre, onChangeGenre} = props;
-  const genres = Object.values(Genres) as Genres[];
+  const {
+    activeGenre,
+    films,
+    promo,
+    onChangeGenre,
+    onChangePromoFavoriteStatus,
+  } = props;
+
+  // const genres = Object.values(Genres) as Genres[];
+  const uniqGenres = [...new Set(films.map((film) => film.genre))].sort();
+  const genres = [
+    Genres.AllGenres,
+    ...uniqGenres,
+  ]
+    .slice(0, GENRES_COUNT_MAX) as Genres[];
 
   const [filteredFilms, setFilteredFilms] = useState(filterFilms(films, activeGenre));
   const [showFilmsCount, setShowFilmsCount] = useState(getNextFilmsCount(filteredFilms.length));
@@ -66,51 +93,25 @@ function MainPage(props: ConnectedComponentProps): JSX.Element {
     onChangeGenre(genre);
   }, [onChangeGenre]);
 
+  if (promo === null) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <section className="film-card">
-        <div className="film-card__bg">
-          <img src="/img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
-        </div>
+        <Promo
+          promo={promo}
+          onChangePromoFavoriteStatus={onChangePromoFavoriteStatus}
+        >
+          <h1 className="visually-hidden">WTW</h1>
 
-        <h1 className="visually-hidden">WTW</h1>
+          <header className="page-header film-card__head">
+            <Logo />
 
-        <header className="page-header film-card__head">
-          <Logo />
-
-          <UserBlock />
-        </header>
-
-        <div className="film-card__wrap">
-          <div className="film-card__info">
-            <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327"/>
-            </div>
-
-            <div className="film-card__desc">
-              <h2 className="film-card__title">{promo.name}</h2>
-              <p className="film-card__meta">
-                <span className="film-card__genre">{promo.genre}</span>
-                <span className="film-card__year">{promo.release}</span>
-              </p>
-
-              <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s" />
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add" />
-                  </svg>
-                  <span>My list</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+            <UserBlock />
+          </header>
+        </Promo>
       </section>
 
       <div className="page-content">

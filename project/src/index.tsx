@@ -4,14 +4,13 @@ import {Router} from 'react-router-dom';
 import {configureStore} from '@reduxjs/toolkit';
 import {Provider} from 'react-redux';
 import {rootReducer} from './store/root-reducer';
-import {requireAuthorization} from './store/action';
-import {checkAuthAction, fetchFilms} from './store/api-action';
+import {requireAuthorization, setIsDataLoaded} from './store/action';
+import {checkAuthAction, fetchFilms, fetchPromo} from './store/api-action';
 import {createApi} from './services/api';
 import {AuthorizationStatus} from './utils/const';
 import {redirect} from './store/middlewares/redirect';
 import {ToastContainer} from 'react-toastify';
 import {browserHistory} from './services/browser-history';
-import {promo} from './app';
 import App from './components/app/app';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -27,16 +26,21 @@ const store = configureStore( {
     }).concat(redirect),
 });
 
-// TODO: заглушка для ошибки авторизации
-store.dispatch(checkAuthAction()).catch(() => (''));
-store.dispatch(fetchFilms());
+Promise.all([
+  store.dispatch(checkAuthAction()).catch(() => ('')), // TODO: заглушка для ошибки авторизации
+  store.dispatch(fetchFilms()),
+  store.dispatch(fetchPromo()),
+])
+  .then(() => {
+    store.dispatch(setIsDataLoaded());
+  });
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router history={browserHistory}>
         <ToastContainer />
-        <App promo={promo} />
+        <App />
       </Router>
     </Provider>
   </React.StrictMode>,

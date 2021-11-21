@@ -6,8 +6,10 @@ import {
   redirectToRoute,
   requireAuthorization,
   requireLogout,
+  setFavoriteFilms,
   setFilm,
   setFilms,
+  setPromo,
   setReviews,
   setSimilarFilms
 } from './action';
@@ -89,6 +91,16 @@ export const fetchReviews = (filmId: number): ThunkActionResult =>
   };
 
 /**
+ * Действие запрашивает список фильмов "к просмотру"
+ */
+export const fetchFavoriteFilms = (): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<FilmAdaptedToServer[]>(APIRoute.Favorite);
+    const adaptedFilms = data.map((film) => adaptFilmToClient(film));
+    dispatch(setFavoriteFilms(adaptedFilms));
+  };
+
+/**
  * Действие отправляет комментарий на сервер
  */
 export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, filmId: number}): ThunkActionResult =>
@@ -99,4 +111,41 @@ export const submitReview = ({filmId, commentPost}: {commentPost: CommentPost, f
     );
     const adaptedData = data.map((review) => adaptReviewToClient(review));
     dispatch(setReviews(adaptedData));
+  };
+
+
+/**
+ * Действие запрашивает promo фильм с сервер
+ */
+export const fetchPromo = (): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<FilmAdaptedToServer>(APIRoute.Promo);
+
+    dispatch(setPromo(adaptFilmToClient(data)));
+  };
+
+export const submitFilmFavoriteStatus = (filmId: number, status: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.post<FilmAdaptedToServer>(
+      replaceRouteParams(
+        replaceRouteParams(APIRoute.ChangeFavoriteStatus, RouteParams.FILM_ID, filmId) as APIRoute,
+        RouteParams.STATUS,
+        status,
+      ),
+    );
+
+    dispatch(setFilm(adaptFilmToClient(data)));
+  };
+
+export const submitPromoFavoriteStatus = (filmId: number, status: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.post<FilmAdaptedToServer>(
+      replaceRouteParams(
+        replaceRouteParams(APIRoute.ChangeFavoriteStatus, RouteParams.FILM_ID, filmId) as APIRoute,
+        RouteParams.STATUS,
+        status,
+      ),
+    );
+
+    dispatch(setPromo(adaptFilmToClient(data)));
   };

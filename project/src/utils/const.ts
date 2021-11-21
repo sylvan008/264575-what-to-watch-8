@@ -30,7 +30,6 @@ export enum AppRoute {
   Main = '/',
   MyList = '/mylist',
   NotFound = '/404',
-  Player = '/player/:id',
 }
 
 /**
@@ -59,6 +58,7 @@ export enum AuthorizationStatus {
 
 export enum ResponseStatusCodes {
   BadRequest = 400,
+  NotAuthorized = 401,
   NotFound= 404,
 }
 
@@ -68,12 +68,18 @@ export enum Messages  {
   AuthError = 'We can’t recognize this email\n and password combination. Please try again.',
 }
 
+export enum FilmStatus {
+  NotFavorite = 0,
+  Favorite = 1,
+}
+
 /**
  * Перечисление с параметрами путей
  */
 export const RouteParams = {
   ID: ':id',
   FILM_ID: ':film_id',
+  STATUS: ':status',
 };
 
 /**
@@ -123,3 +129,13 @@ export const RATING_MAX = 10;
  * Имя свойства для хранения токена авторизации
  */
 export const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';
+
+/**
+ * Максимальное количество отображаемых жанров
+ */
+export const GENRES_COUNT_MAX = 10;
+
+/**
+ * Элемент не найден в массиве
+ */
+export const NOT_INCLUDE = -1;

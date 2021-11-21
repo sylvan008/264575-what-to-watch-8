@@ -7,7 +7,10 @@ describe('Reducer: userProcess', () => {
   let initialState: UserProcess;
 
   beforeAll(() => {
-    initialState = {authorizationStatus: AuthorizationStatus.Unknown};
+    initialState = {
+      authorizationStatus: AuthorizationStatus.Unknown,
+      favoriteFilms: [],
+    };
   });
 
   it('without additional parameters should return initial state', () => {
@@ -22,13 +25,19 @@ describe('Reducer: userProcess', () => {
     };
 
     expect(userProcess(initialState, requireAuthorizationAction))
-      .toEqual({authorizationStatus: AuthorizationStatus.Auth});
+      .toEqual({
+        ...initialState,
+        authorizationStatus: AuthorizationStatus.Auth,
+      });
   });
 
   it('should update authorization status to "NO_AUTH"', () => {
     const requireLogoutAction = {type: ActionType.RequireLogout};
 
     expect(userProcess(initialState, requireLogoutAction))
-      .toEqual({authorizationStatus: AuthorizationStatus.NoAuth});
+      .toEqual({
+        ...initialState,
+        authorizationStatus: AuthorizationStatus.NoAuth,
+      });
   });
 });

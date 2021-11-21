@@ -8,7 +8,6 @@ import {createMemoryHistory} from 'history';
 import {NameSpace} from '../../store/root-reducer';
 import {APIRoute, AppRoute, AuthorizationStatus, Genres, RouteParams} from '../../utils/const';
 import {createMockFilm} from '../../utils/mocks/create-mock-film';
-import {promo} from '../../app';
 import {replaceRouteParams} from '../../utils/common';
 import {State} from '../../types/state';
 import App from './app';
@@ -32,6 +31,7 @@ const store = mockStore({
   [NameSpace.data]: {
     isDataLoaded: true,
     films: [],
+    promo: mockFilm,
   },
 });
 
@@ -39,7 +39,7 @@ const history = createMemoryHistory();
 const fakeApp = (
   <Provider store={store}>
     <Router history={history}>
-      <App promo={promo} />
+      <App />
     </Router>
   </Provider>
 );

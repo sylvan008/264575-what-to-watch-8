@@ -1,10 +1,38 @@
-import {PropsType} from './types';
 import Logo from '../logo/logo';
 import Footer from '../footer/footer';
 import UserBlock from '../user-block/user-block';
 import FilmsList from '../films-list/films-list';
+import {getFavoriteFilms} from '../../store/user-process/selectors';
+import {State} from '../../types/state';
+import {Dispatch} from '@reduxjs/toolkit';
+import {ThunkAppDispatch} from '../../types/action';
+import {fetchFavoriteFilms} from '../../store/api-action';
+import {connect, ConnectedProps} from 'react-redux';
+import Spinner from '../spinner/spinner';
+import {useEffect} from 'react';
 
-function MyList({films}: PropsType): JSX.Element {
+const mapStateToProps = (state: State) => ({
+  favoriteFilms: getFavoriteFilms(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  onFetchFavoriteFilms() {
+    (dispatch as ThunkAppDispatch)(fetchFavoriteFilms());
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type TypeFromRedux = ConnectedProps<typeof connector>;
+
+function MyList({favoriteFilms, onFetchFavoriteFilms}: TypeFromRedux): JSX.Element {
+  useEffect(() => {
+    onFetchFavoriteFilms();
+  }, [onFetchFavoriteFilms]);
+
+  if (!favoriteFilms.length) {
+    return <Spinner />;
+  }
+
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -18,7 +46,7 @@ function MyList({films}: PropsType): JSX.Element {
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <FilmsList films={films} />
+        <FilmsList films={favoriteFilms} />
       </section>
 
       <Footer />
@@ -26,4 +54,5 @@ function MyList({films}: PropsType): JSX.Element {
   );
 }
 
-export default MyList;
+export {MyList};
+export default connector(MyList);

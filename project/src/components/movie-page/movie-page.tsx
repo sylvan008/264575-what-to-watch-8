@@ -1,10 +1,10 @@
 import {Dispatch} from '@reduxjs/toolkit';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
 import {AxiosError} from 'axios';
 import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
-import {fetchFilm, fetchReviews, fetchSimilarFilms} from '../../store/api-action';
+import {fetchFilm, fetchReviews, fetchSimilarFilms, submitFilmFavoriteStatus} from '../../store/api-action';
 import {browserHistory} from '../../services/browser-history';
 import {State} from '../../types/state';
 import {ThunkAppDispatch} from '../../types/action';
@@ -15,7 +15,10 @@ import Footer from '../footer/footer';
 import FilmOverview from '../film-overview/film-overview';
 import FilmDetails from '../film-details/film-details';
 import FilmReviews from '../film-reviews/film-reviews';
+import MyListButton from '../my-list-button/my-list-button';
 import Logo from '../logo/logo';
+import Player from '../player/player';
+import PlayButton from '../play-button/play-button';
 import Spinner from '../spinner/spinner';
 import Tabs from '../tabs/tabs';
 import UserBlock from '../user-block/user-block';
@@ -44,6 +47,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadReviews(filmId: number) {
     (dispatch as ThunkAppDispatch)(fetchReviews(filmId));
   },
+  onChangePromoFavoriteStatus(filmId: number, status: number) {
+    (dispatch as ThunkAppDispatch)(submitFilmFavoriteStatus(filmId, status))
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.NotAuthorized) {
+          browserHistory.push(AppRoute.Login);
+        }
+      });
+  },
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -53,8 +64,24 @@ type params = {
   id: string,
 }
 
-function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadReviews, reviews, similarFilms}: PropsFromRedux): JSX.Element {
+/**
+ * Компонент для подробного отображения информации о фильме
+ */
+function MoviePage(
+  {
+    isUserAuthorized,
+    film,
+    loadFilm,
+    loadSimilarFilms,
+    loadReviews,
+    reviews,
+    similarFilms,
+    onChangePromoFavoriteStatus,
+  }: PropsFromRedux): JSX.Element {
   const {id}: params = useParams();
+  const [isPlay, setIsPlay] = useState(false);
+  const onPlayClick = () => setIsPlay(true);
+  const onPlayerStop = () => setIsPlay(false);
 
   useEffect(() => {
     const filmId = Number(id);
@@ -73,6 +100,7 @@ function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadRevi
 
   return (
     <>
+      {isPlay && <Player film={film} onStopClick={onPlayerStop} />}
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
@@ -96,18 +124,11 @@ function MoviePage({isUserAuthorized, film, loadFilm, loadSimilarFilms, loadRevi
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s" />
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add" />
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <PlayButton onPlayClick={onPlayClick} />
+                <MyListButton
+                  isInMyList={film.isFavorite}
+                  onChangeMyList={(status) => onChangePromoFavoriteStatus(film.id, status)}
+                />
                 {isUserAuthorized &&
                   <Link to={AppRoute.AddReview.replace(RouteParams.ID, id)} className="btn film-card__button">
                     Add review

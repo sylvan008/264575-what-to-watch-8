@@ -2,32 +2,29 @@ import {Route, Switch} from 'react-router-dom';
 import {AppRoute} from '../../utils/const';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../app';
-import {PropsType} from './types';
 import {State} from '../../types/state';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getIsDataLoaded} from '../../store/app-data/selectors';
 import AddReview from '../add-review/add-review';
 import MainPage from '../main-page/main-page';
 import MoviePage from '../movie-page/movie-page';
 import MyList from '../my-list/my-list';
 import NotFound from '../not-found/not-found';
-import Player from '../player/player';
 import PrivateRoute from '../private-route/private-route';
 import SignIn from '../sign-in/sign-in';
 import Spinner from '../spinner/spinner';
-import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {getFilms, getIsDataLoaded} from '../../store/app-data/selectors';
 
 const mapStateToProps = (state: State) => ({
   authorizationStatus: getAuthorizationStatus(state),
-  films: getFilms(state),
   isDataLoaded: getIsDataLoaded(state),
 });
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector> & PropsType;
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function App(props: PropsFromRedux): JSX.Element {
-  const {authorizationStatus, promo, films, isDataLoaded} = props;
+  const {authorizationStatus, isDataLoaded} = props;
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return <Spinner />;
@@ -36,7 +33,7 @@ function App(props: PropsFromRedux): JSX.Element {
   return (
     <Switch>
       <Route exact path={AppRoute.Main}>
-        <MainPage promo={promo} />
+        <MainPage />
       </Route>
       <PrivateRoute
         exact
@@ -49,11 +46,8 @@ function App(props: PropsFromRedux): JSX.Element {
       <PrivateRoute
         exact
         path={AppRoute.MyList}
-        render={() => <MyList films={films} />}
+        render={() => <MyList />}
       />
-      <Route exact path={AppRoute.Player}>
-        <Player />
-      </Route>
       <Route exact path={AppRoute.Login}>
         <SignIn />
       </Route>
