@@ -56,18 +56,27 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
+/**
+ * Статусы ответа от сервера
+ */
 export enum ResponseStatusCodes {
   BadRequest = 400,
   NotAuthorized = 401,
   NotFound= 404,
 }
 
+/**
+ * Сообщения для формы входа
+ */
 export enum Messages  {
   EmailInvalid = 'Please enter a valid email address',
   PasswordInvalid = 'Password must be at least 1 letter and 1 digit',
   AuthError = 'We can’t recognize this email\n and password combination. Please try again.',
 }
 
+/**
+ * Статус фильма, для изменения его состояния и выбора в список просмотров
+ */
 export enum FilmStatus {
   NotFavorite = 0,
   Favorite = 1,
@@ -134,8 +143,3 @@ export const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';
  * Максимальное количество отображаемых жанров
  */
 export const GENRES_COUNT_MAX = 10;
-
-/**
- * Элемент не найден в массиве
- */
-export const NOT_INCLUDE = -1;
