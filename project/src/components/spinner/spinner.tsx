@@ -1,10 +1,11 @@
 import CSS from 'csstype';
+import Portal from '../portal/portal';
+import {TestId} from '../../utils/mocks/testing-const';
 import './spinner-styles.css';
 
 /**
  * Компонент-индикатор загрузки данных с сервера
  */
-import Portal from '../portal/portal';
 
 export function Spinner({styles = {}}: {styles?: CSS.Properties}): JSX.Element {
   return (
@@ -16,7 +17,7 @@ export function Spinner({styles = {}}: {styles?: CSS.Properties}): JSX.Element {
           style={{...styles}}
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid"
-          data-testid="spinner-icon"
+          data-testid={TestId.SpinnerIcon}
         >
           <use xlinkHref="#spinner" />
         </svg>

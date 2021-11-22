@@ -11,6 +11,7 @@ import {validateEmail, validatePassword} from '../../utils/validation';
 import Footer from '../footer/footer';
 import Logo from '../logo/logo';
 import SigninMessage from '../signin-message/signin-message';
+import {TestId} from '../../utils/mocks/testing-const';
 
 const SIGNIN_ERROR_CLASS = 'sign-in__field--error';
 
@@ -109,7 +110,13 @@ function SignIn(): JSX.Element {
             </div>
           </div>
           <div className="sign-in__submit">
-            <button className="sign-in__btn" type="submit">Sign in</button>
+            <button
+              className="sign-in__btn"
+              type="submit"
+              data-testid={TestId.SignIn}
+            >
+              Sign in
+            </button>
           </div>
         </form>
       </div>

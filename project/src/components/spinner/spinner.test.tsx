@@ -1,4 +1,5 @@
 import {render, screen} from '@testing-library/react';
+import {TestId} from '../../utils/mocks/testing-const';
 import Spinner from './spinner';
 
 describe('Component: Spinner', () => {
@@ -16,7 +17,7 @@ describe('Component: Spinner', () => {
     };
     render(<Spinner styles={testStyles} />)
 
-    const spinnerIcon = screen.getByTestId('spinner-icon');
+    const spinnerIcon = screen.getByTestId(TestId.SpinnerIcon);
 
     expect(spinnerIcon).toHaveStyle('width: 50px');
     expect(spinnerIcon).toHaveStyle('height: 50px');
