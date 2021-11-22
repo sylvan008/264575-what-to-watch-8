@@ -2,10 +2,12 @@ import {MouseEvent, useEffect, useRef, useState} from 'react';
 import Spinner from '../spinner/spinner';
 import {humanizeVideoTimeLeft} from '../../utils/common';
 import {PropsType} from './types';
+import {classNames} from '../../utils/common';
+import './player-styles.css';
 
 const STYLE_ATTRIBUTE = 'style';
-const PLAYER_INSET = 30;
-const PLAYER_FULLSCREEN = 0;
+const VIDEO_PLAYER_CLASS = 'player';
+const VIDEO_PLAYER_FULLSCREEN_CLASS = 'player--fullscreen';
 
 /**
  * Компонент для отображения видеороликов, с элементами управления
@@ -60,19 +62,6 @@ function Player({film, onStopClick}: PropsType): JSX.Element {
     setIsFullScreen(true);
   };
 
-  const createPlayerStyles = () => {
-    const inset = `${isFullScreen ? PLAYER_FULLSCREEN : PLAYER_INSET}%`;
-
-    return {
-      top: inset,
-      left: inset,
-      width: `calc(100% - ${inset} * 2)`,
-      height: `calc(100% - ${inset} * 2)`,
-      minHeight: '360px',
-      zIndex: 100,
-    };
-  };
-
   const getVideoPercent = (duration:number, current:number): number => {
     if (!duration) {
       return 0;
@@ -103,12 +92,10 @@ function Player({film, onStopClick}: PropsType): JSX.Element {
 
   const videoPercent = getVideoPercent(videoDuration, currentTime);
   const videoTimeLeft = humanizeVideoTimeLeft(getVideoTimeLeft(videoDuration, currentTime));
+  const playerClasses = classNames(VIDEO_PLAYER_CLASS, isFullScreen ? VIDEO_PLAYER_FULLSCREEN_CLASS : '');
 
   return (
-    <div
-      className="player"
-      style={createPlayerStyles()}
-    >
+    <div className={playerClasses}>
       <video
         src={videoLink}
         className="player__video"

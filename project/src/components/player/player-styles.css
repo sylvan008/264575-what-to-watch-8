@@ -1,0 +1,13 @@
+.player {
+  --indent: 30%;
+  top: var(--indent);
+  left: var(--indent);
+  width: calc(100% - var(--indent) * 2);
+  height: calc(100% - var(--indent) * 2);
+  min-height: 360px;
+  z-index: 100;
+}
+
+.player--fullscreen {
+  --indent: 0%;
+}
