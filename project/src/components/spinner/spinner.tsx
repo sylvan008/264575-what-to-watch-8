@@ -16,6 +16,7 @@ export function Spinner({styles = {}}: {styles?: CSS.Properties}): JSX.Element {
           style={{...styles}}
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid"
+          data-testid="spinner-icon"
         >
           <use xlinkHref="#spinner" />
         </svg>
