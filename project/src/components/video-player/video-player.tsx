@@ -1,6 +1,9 @@
 import {useEffect, useRef, useState} from 'react';
 import {PropsType} from './props';
 
+const VIDEO_WIDTH = '280';
+const VIDEO_HEIGHT = '175';
+
 export function VideoPlayer({isAutoPlay = false, isMuted = true, src, poster}: PropsType): JSX.Element {
   const [isPlaying] = useState(isAutoPlay);
 
@@ -25,8 +28,8 @@ export function VideoPlayer({isAutoPlay = false, isMuted = true, src, poster}: P
       poster={poster}
       muted={isMuted}
       ref={videoRef}
-      width="280"
-      height="175"
+      width={VIDEO_WIDTH}
+      height={VIDEO_HEIGHT}
     />
   );
 }
