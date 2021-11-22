@@ -1,12 +1,12 @@
 import {FormEvent, useCallback, useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
-import {connect, ConnectedProps} from 'react-redux';
-import {Dispatch} from '@reduxjs/toolkit';
-import {AppRoute, RouteParams} from '../../utils/const';
+import {useDispatch, useSelector} from 'react-redux';
+import {AxiosError} from 'axios';
+import {browserHistory} from '../../services/browser-history';
+import {AppRoute, ResponseStatusCodes, RouteParams} from '../../utils/const';
 import {ThunkAppDispatch} from '../../types/action';
 import {CommentPost} from '../../types/review';
 import {UrlParams} from '../../types/url-params';
-import {State} from '../../types/state';
 import {fetchFilm, submitReview} from '../../store/api-action';
 import {useUserReview} from '../../hooks/use-user-review';
 import {getFilm} from '../../store/film-process/selectors';
@@ -15,26 +15,15 @@ import RatingInputs from '../rating-inputs/rating-inputs';
 import Spinner from '../spinner/spinner';
 import UserBlock from '../user-block/user-block';
 
-const mapStateToProps = (state: State) => ({
-  film: getFilm(state),
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  reviewSubmitHandler(submitData: {filmId: number, commentPost: CommentPost}) {
-    return (dispatch as ThunkAppDispatch)(submitReview(submitData));
-  },
-  loadFilm(filmId: number) {
-    (dispatch as ThunkAppDispatch)(fetchFilm(filmId));
-  },
-});
-
-const connected = connect(mapStateToProps, mapDispatchToProps);
-type PropsFormRedux = ConnectedProps<typeof connected>;
-
 /**
  * Компонент формы отправки отзыва о фильме
  */
-function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.Element {
+function AddReview():JSX.Element {
+  const dispatch: ThunkAppDispatch = useDispatch();
+  const film = useSelector(getFilm);
+
+  const reviewSubmitHandler = (submitData: {filmId: number, commentPost: CommentPost}) => dispatch(submitReview(submitData));
+
   const {id}: UrlParams = useParams();
   const [
     isFormSubmit,
@@ -48,8 +37,13 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
 
   useEffect(() => {
     const filmId = Number(id);
-    loadFilm(filmId);
-  }, [id, loadFilm]);
+    dispatch(fetchFilm(filmId))
+      .catch((error: AxiosError) => {
+        if (error.response?.status === ResponseStatusCodes.NotFound) {
+          browserHistory.push(AppRoute.NotFound);
+        }
+      });
+  }, [id]);
 
   const onChangeRating = useCallback((ratingUpdate) => {
     handleRatingChange(ratingUpdate);
@@ -142,5 +136,4 @@ function AddReview({film, loadFilm, reviewSubmitHandler}: PropsFormRedux):JSX.El
   );
 }
 
-export {AddReview};
-export default connected(AddReview);
+export default AddReview;
