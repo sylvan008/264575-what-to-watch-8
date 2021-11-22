@@ -61,7 +61,6 @@ function MainPage(props: ConnectedComponentProps): JSX.Element {
     onChangePromoFavoriteStatus,
   } = props;
 
-  // const genres = Object.values(Genres) as Genres[];
   const uniqGenres = [...new Set(films.map((film) => film.genre))].sort();
   const genres = [
     Genres.AllGenres,
