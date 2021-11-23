@@ -143,3 +143,8 @@ export const AUTH_TOKEN_KEY_NAME = 'minor-gods-movie-token';
  * Максимальное количество отображаемых жанров
  */
 export const GENRES_COUNT_MAX = 10;
+
+/**
+ * Время удержания мышки над карточкой фильма для воспроизведения видеоролика
+ */
+export const PREVIEW_TIMEOUT = 1000;

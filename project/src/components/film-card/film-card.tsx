@@ -1,11 +1,9 @@
 import {Link} from 'react-router-dom';
-import {AppRoute, RouteParams} from '../../utils/const';
+import {AppRoute, PREVIEW_TIMEOUT, RouteParams} from '../../utils/const';
 import {PropsType} from './types';
 import {VideoPlayer} from '../video-player/video-player';
 import {replaceRouteParams} from '../../utils/common';
 import {browserHistory} from '../../services/browser-history';
-
-const PREVIEW_TIMEOUT = 1000;
 
 function FilmCard({playPreview = false, film, updateActiveCard}: PropsType): JSX.Element {
   const {name, previewImage, id, previewVideoLink} = film;
@@ -31,7 +29,7 @@ function FilmCard({playPreview = false, film, updateActiveCard}: PropsType): JSX
         onClick={() => browserHistory.push(filmLink)}
       >
         {playPreview
-          ? <VideoPlayer src={previewVideoLink} poster={previewImage} isAutoPlay />
+          ? <VideoPlayer src={previewVideoLink} poster={previewImage} isAutoPlay/>
           : <img src={previewImage} alt={name} width="280" height="175" />}
 
       </div>
